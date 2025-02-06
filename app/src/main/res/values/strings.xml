@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Progo</string>
+    <string name="user_name">Nombre</string>
+    <string name="user_birthday">Fecha de nacimiento</string>
+    <string name="training_user_years">Años entrenando</string>
+    <string name="profile">Perfil</string>
+    <string name="information">Información</string>
+    <string name="workout">Entrenamiento</string>
+</resources>
