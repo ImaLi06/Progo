@@ -5,9 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.progo.data.dataBase.progoDataBase
 import com.example.progo.data.entities.exercise
-import com.example.progo.data.entities.ExerciseWithRoutine
+import com.example.progo.data.entities.ExerciseRoutine.ExerciseWithRoutine
 import com.example.progo.data.entities.routine
-import com.example.progo.data.entities.routineWithExercise
+import com.example.progo.data.entities.ExerciseRoutine.routineWithExercise
 import com.example.progo.data.repository.exerciseRoutineRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -51,12 +51,12 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
         }
     }
 
-    fun GetRoutineWithExercise(routineId: Int): List<routineWithExercise> {
-        return repository.getRoutineWithExercise(routineId)
+    fun GetRoutineWithExercise(routineName: String): List<routineWithExercise> {
+        return repository.getRoutineWithExercise(routineName)
     }
 
-    fun GetExerciseWithRoutine(exerciseId: Int): List<ExerciseWithRoutine>{
-        return repository.getExerciseWithRoutine(exerciseId)
+    fun GetExerciseWithRoutine(exerciseName: String): List<ExerciseWithRoutine>{
+        return repository.getExerciseWithRoutine(exerciseName)
     }
 
     fun InsertRoutineWithExercises(routine: routine, exercises: List<exercise>) {

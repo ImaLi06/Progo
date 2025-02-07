@@ -1,17 +1,16 @@
-package com.example.progo.data.entities
+package com.example.progo.data.entities.ExerciseRoutine
 
-import androidx.lifecycle.LiveData
 import androidx.room.Embedded
-import androidx.room.Entity
 import androidx.room.Junction
 import androidx.room.Relation
-import kotlinx.coroutines.flow.Flow
+import com.example.progo.data.entities.exercise
+import com.example.progo.data.entities.routine
 
 data class routineWithExercise(
     @Embedded val routine: routine,
     @Relation(
-        parentColumn = "routineId",
-        entityColumn = "exerciseId",
+        parentColumn = "routineName",
+        entityColumn = "exerciseName",
         associateBy = Junction(exerciseRoutineCrossRef::class)
     )
 

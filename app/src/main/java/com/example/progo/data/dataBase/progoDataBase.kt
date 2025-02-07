@@ -6,12 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.progo.data.dao.ExerciseRoutineDao
 import com.example.progo.data.entities.exercise
-import com.example.progo.data.entities.exerciseRoutineCrossRef
+import com.example.progo.data.entities.ExerciseRoutine.exerciseRoutineCrossRef
 import com.example.progo.data.entities.routine
 
 @Database(
     entities = [exercise::class, routine::class, exerciseRoutineCrossRef::class],
-    version = 2
+    version = 3
 )
 abstract class progoDataBase: RoomDatabase() {
     abstract fun exerciseRoutineDao(): ExerciseRoutineDao

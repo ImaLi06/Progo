@@ -2,9 +2,9 @@ package com.example.progo.data.repository
 
 import com.example.progo.data.dao.ExerciseRoutineDao
 import com.example.progo.data.entities.exercise
-import com.example.progo.data.entities.ExerciseWithRoutine
+import com.example.progo.data.entities.ExerciseRoutine.ExerciseWithRoutine
 import com.example.progo.data.entities.routine
-import com.example.progo.data.entities.routineWithExercise
+import com.example.progo.data.entities.ExerciseRoutine.routineWithExercise
 import kotlinx.coroutines.flow.Flow
 
 class exerciseRoutineRepository(private val exerciseRoutineDao: ExerciseRoutineDao) {
@@ -30,11 +30,11 @@ class exerciseRoutineRepository(private val exerciseRoutineDao: ExerciseRoutineD
         exerciseRoutineDao.deleteRoutineWithCrossRef(routine)
     }
 
-    fun getRoutineWithExercise(routineId: Int): List<routineWithExercise>{
-        return exerciseRoutineDao.getRoutineWithExercise(routineId)
+    fun getRoutineWithExercise(routineName: String): List<routineWithExercise>{
+        return exerciseRoutineDao.getRoutineWithExercise(routineName)
     }
-    fun getExerciseWithRoutine(exerciseId: Int): List<ExerciseWithRoutine>{
-        return exerciseRoutineDao.getExerciseWithRoutine(exerciseId)
+    fun getExerciseWithRoutine(exerciseName: String): List<ExerciseWithRoutine>{
+        return exerciseRoutineDao.getExerciseWithRoutine(exerciseName)
     }
 
     suspend fun insertRoutineWithExercises(routine: routine, exercises: List<exercise>) {
