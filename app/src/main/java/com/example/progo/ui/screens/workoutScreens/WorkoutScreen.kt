@@ -123,7 +123,7 @@ fun AdditionalOptions(viewModel: ExerciseRoutineViewModel, item: routine, navCon
         }
 
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            DropdownMenuItem(onClick = { viewModel.DeleteRoutineWithCrossRef(item)}, text = {Text("Eliminar")})
+            DropdownMenuItem(onClick = { viewModel.deleteRoutineWithCrossRef(item)}, text = {Text("Eliminar")})
             DropdownMenuItem(
                 onClick = {},
                 text = { Text("Editar")}

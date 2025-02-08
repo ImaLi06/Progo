@@ -53,7 +53,7 @@ fun NewExerciseContent(paddingValues: PaddingValues, viewModel: ExerciseRoutineV
             onClick = {
                 val trimExerciseName = exerciseNameAux.trim()
                 if(trimExerciseName.isNotEmpty()){
-                    viewModel.AddExercise(exercise(exerciseName = exerciseNameAux))
+                    viewModel.addExercise(exercise(exerciseName = exerciseNameAux))
                     exerciseNameAux = ""
                     navController.popBackStack()
                 }

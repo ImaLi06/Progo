@@ -97,7 +97,7 @@ fun MainWorkoutContent(
                 onClick = {
                     val trimRoutineName = routineName.trim()
                     if(trimRoutineName.isNotEmpty()) {
-                        viewModel.InsertRoutineWithExercises(
+                        viewModel.insertRoutineWithExercises(
                             routine = routine(routineName = routineName),
                             exercises = exerciseList
                         )

@@ -8,6 +8,9 @@ import com.example.progo.data.entities.exercise
 import com.example.progo.data.entities.ExerciseRoutine.ExerciseWithRoutine
 import com.example.progo.data.entities.routine
 import com.example.progo.data.entities.ExerciseRoutine.routineWithExercise
+import com.example.progo.data.entities.ExerciseRoutineRecord.RoutineRecordWithExercise
+import com.example.progo.data.entities.RoutineRecord
+import com.example.progo.data.repository.ExerciseRoutineRecordRepository
 import com.example.progo.data.repository.exerciseRoutineRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -16,15 +19,20 @@ import kotlinx.coroutines.launch
 class ExerciseRoutineViewModel(application: Application):AndroidViewModel(application) {
 
     private val repository: exerciseRoutineRepository
+    private val repositoryRecord: ExerciseRoutineRecordRepository
     val allExercises: Flow<List<exercise>>
     val allRoutines: Flow<List<routine>>
+    val allRoutinesRecord: Flow<List<RoutineRecord>>
 
     init {
         val exerciseRoutineDao = progoDataBase.getProgoDataBase(application).exerciseRoutineDao()
+        val exerciseRoutineRecordDao = progoDataBase.getProgoDataBase(application).exerciseRoutineRecordDao()
         repository = exerciseRoutineRepository(exerciseRoutineDao)
+        repositoryRecord = ExerciseRoutineRecordRepository(exerciseRoutineRecordDao)
 
         allExercises = repository.readAllDataExercise
         allRoutines = repository.readAllDataRoutine
+        allRoutinesRecord = repositoryRecord.readAllDataRoutineRecord
     }
 
     private suspend fun insertDefaultExercises() {
@@ -39,33 +47,37 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
         repository.AddDefaultExercises(defaultExercises)
     }
 
-    fun AddExercise(exercise: exercise) {
+    fun addExercise(exercise: exercise) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addExercise(exercise)
         }
     }
 
-    fun AddRoutine(routine: routine) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.addRoutine(routine)
-        }
-    }
-
-    fun GetRoutineWithExercise(routineName: String): List<routineWithExercise> {
+    fun getRoutineWithExercise(routineName: String): List<routineWithExercise> {
         return repository.getRoutineWithExercise(routineName)
     }
 
-    fun GetExerciseWithRoutine(exerciseName: String): List<ExerciseWithRoutine>{
+    fun getExerciseWithRoutine(exerciseName: String): List<ExerciseWithRoutine>{
         return repository.getExerciseWithRoutine(exerciseName)
     }
 
-    fun InsertRoutineWithExercises(routine: routine, exercises: List<exercise>, sets: Int) {
+    fun getRoutineRecordWithExercise(routineRecordId: Int): List<RoutineRecordWithExercise>{
+        return repositoryRecord.getRoutineRecordWithExercise(routineRecordId)
+    }
+
+    fun insertRoutineWithExercises(routine: routine, exercises: List<exercise>, sets: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertRoutineWithExercises(routine, exercises, sets)
         }
     }
 
-    fun DeleteRoutineWithCrossRef(routine: routine){
+    fun insertRoutineRecordWithExercises(routineRecord: RoutineRecord, exercises: List<exercise>, sets: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            repositoryRecord.addRoutineRecordWithExercises(routineRecord, exercises, sets)
+        }
+    }
+
+    fun deleteRoutineWithCrossRef(routine: routine){
         viewModelScope.launch(Dispatchers.IO){
             repository.deleteRoutineWithCrossRef(routine)
         }
