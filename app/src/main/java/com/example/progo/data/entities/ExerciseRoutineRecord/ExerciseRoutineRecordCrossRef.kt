@@ -10,5 +10,6 @@ import androidx.room.Index
 data class ExerciseRoutineRecordCrossRef(
     val exerciseName: String,
     val routineRecordId: Int,
-    val sets: Int
+    val sets: Int = 1,
+    val reps: List<Int> = emptyList()
 )

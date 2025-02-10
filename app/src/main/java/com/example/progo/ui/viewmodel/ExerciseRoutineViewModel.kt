@@ -71,9 +71,9 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
         }
     }
 
-    fun insertRoutineRecordWithExercises(routineRecord: RoutineRecord, exercises: List<exercise>, sets: Int){
+    fun insertRoutineRecordWithExercises(routineRecord: RoutineRecord, exercises: List<exercise>, sets: Int, reps: List<Int>){
         viewModelScope.launch(Dispatchers.IO){
-            repositoryRecord.addRoutineRecordWithExercises(routineRecord, exercises, sets)
+            repositoryRecord.addRoutineRecordWithExercises(routineRecord, exercises, sets, reps)
         }
     }
 
