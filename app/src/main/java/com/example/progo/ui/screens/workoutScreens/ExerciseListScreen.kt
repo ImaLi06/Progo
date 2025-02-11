@@ -19,7 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.progo.data.entities.exercise
+import com.example.progo.data.entities.Exercise
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.ProgoTopBar
 import com.example.progo.ui.navigationScreens.WorkoutScreen
@@ -75,7 +75,7 @@ fun ExerciseListContent(
 }
 
 @Composable
-fun Exercises(item: exercise, sharedViewModel: ExerciseRoutineSharedViewModel, navController: NavController){
+fun Exercises(item: Exercise, sharedViewModel: ExerciseRoutineSharedViewModel, navController: NavController){
     Button(
         onClick = {
             sharedViewModel.addExercise(item)

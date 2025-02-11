@@ -14,12 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.progo.data.entities.exercise
+import com.example.progo.data.entities.Exercise
 
 @Composable
-fun InputTemplate(item: exercise){
+fun InputTemplate(item: Exercise){
     var aux: String
     Column(modifier = Modifier
         .clip(shape = RoundedCornerShape(15.dp))
@@ -40,7 +39,7 @@ fun InputTemplate(item: exercise){
                 modifier = Modifier.width(50.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text("${item.weight} X ${item.reps}")
+                Text("wexrep")
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally

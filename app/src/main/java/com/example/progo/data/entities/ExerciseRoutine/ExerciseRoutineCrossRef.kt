@@ -7,7 +7,7 @@ import androidx.room.Index
     primaryKeys = ["exerciseName", "routineName"],
     indices = [Index(value = ["exerciseName"]), Index(value = ["routineName"])]
 )
-data class exerciseRoutineCrossRef(
+data class ExerciseRoutineCrossRef(
     val exerciseName: String,
     val routineName: String,
     val sets: Int

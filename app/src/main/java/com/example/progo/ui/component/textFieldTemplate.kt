@@ -1,10 +1,8 @@
 package com.example.progo.ui.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -17,7 +15,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun userDataTextFieldTemplate(value: String, onValueChange:(String) -> Unit){
+fun UserDataTextFieldTemplate(value: String, onValueChange:(String) -> Unit){
     TextField(
         value = value,
         onValueChange = onValueChange,

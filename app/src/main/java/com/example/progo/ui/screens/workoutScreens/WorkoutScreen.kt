@@ -34,7 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.progo.data.entities.routine
+import com.example.progo.data.entities.Routine
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.navigationScreens.Graph
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
@@ -63,7 +63,7 @@ fun WorkoutScreen(navController: NavController, paddingValues: PaddingValues, vi
 }
 
 @Composable
-fun RoutinePreVisualization(item: routine, viewModel: ExerciseRoutineViewModel, navController: NavController){
+fun RoutinePreVisualization(item: Routine, viewModel: ExerciseRoutineViewModel, navController: NavController){
     Button(
         onClick = {},
         colors = ButtonDefaults.buttonColors(
@@ -114,7 +114,7 @@ fun CreateNewRoutineButton(navController: NavController){
 }
 
 @Composable
-fun AdditionalOptions(viewModel: ExerciseRoutineViewModel, item: routine, navController: NavController){
+fun AdditionalOptions(viewModel: ExerciseRoutineViewModel, item: Routine, navController: NavController){
     var expanded by remember { mutableStateOf(false) }
 
     Box {

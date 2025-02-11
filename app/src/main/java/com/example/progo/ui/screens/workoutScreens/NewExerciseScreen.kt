@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.progo.data.entities.exercise
+import com.example.progo.data.entities.Exercise
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.PrincipalTextLabel
 import com.example.progo.ui.component.ProgoTopBar
@@ -53,7 +53,7 @@ fun NewExerciseContent(paddingValues: PaddingValues, viewModel: ExerciseRoutineV
             onClick = {
                 val trimExerciseName = exerciseNameAux.trim()
                 if(trimExerciseName.isNotEmpty()){
-                    viewModel.addExercise(exercise(exerciseName = exerciseNameAux))
+                    viewModel.addExercise(Exercise(exerciseName = exerciseNameAux))
                     exerciseNameAux = ""
                     navController.popBackStack()
                 }

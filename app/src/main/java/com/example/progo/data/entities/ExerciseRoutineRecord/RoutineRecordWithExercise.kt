@@ -4,15 +4,14 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 import com.example.progo.data.entities.RoutineRecord
-import com.example.progo.data.entities.exercise
+import com.example.progo.data.entities.ExerciseRecord
 
 data class RoutineRecordWithExercise(
     @Embedded val routineRecord: RoutineRecord,
     @Relation(
         parentColumn = "routineRecordId",
-        entityColumn = "exerciseName",
-        associateBy = Junction(ExerciseRoutineRecordCrossRef::class)
+        entityColumn = "exerciseRecordId",
     )
 
-    val exercises: List<exercise>
+    val exercisesRecord: List<ExerciseRecord>
 )

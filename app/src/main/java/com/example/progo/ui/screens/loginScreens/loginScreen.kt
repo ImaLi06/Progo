@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -21,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.progo.R
 import com.example.progo.ui.component.PrincipalButton
-import com.example.progo.ui.component.userDataTextFieldTemplate
+import com.example.progo.ui.component.UserDataTextFieldTemplate
 import com.example.progo.ui.component.SecondaryTextTemplate
 
 @Composable
@@ -72,7 +71,7 @@ fun insertUserTrainingTime(userData: String, onValueChange: (String) -> Unit) {
         stringResource(R.string.training_user_years),
         20
     )
-    userDataTextFieldTemplate(
+    UserDataTextFieldTemplate(
         value = userData,
         onValueChange = onValueChange
     )
@@ -84,7 +83,7 @@ fun insertUserBirthday(userData: String, onValueChange: (String) -> Unit) {
         stringResource(R.string.user_birthday),
         20
     )
-    userDataTextFieldTemplate(
+    UserDataTextFieldTemplate(
         value = userData,
         onValueChange = onValueChange
     )
@@ -96,7 +95,7 @@ fun insertUserName(userData: String, onValueChange: (String) -> Unit) {
         stringResource(R.string.user_name),
         20
     )
-    userDataTextFieldTemplate(
+    UserDataTextFieldTemplate(
         value = userData,
         onValueChange = onValueChange
     )

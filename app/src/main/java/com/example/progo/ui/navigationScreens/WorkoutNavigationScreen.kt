@@ -17,12 +17,10 @@ import com.example.progo.ui.screens.workoutScreens.NewExerciseScreen
 import com.example.progo.ui.screens.workoutScreens.MainWorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
-import com.example.progo.ui.viewmodel.HomeSharedViewModel
 
 fun NavGraphBuilder.workoutNavGraph(
     navController: NavHostController,
-    viewModel: ExerciseRoutineViewModel,
-    homeSharedViewModel: HomeSharedViewModel
+    viewModel: ExerciseRoutineViewModel
 ) {
     navigation(
         route = Graph.WORKOUT,

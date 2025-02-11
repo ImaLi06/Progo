@@ -7,63 +7,63 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.example.progo.data.entities.exercise
-import com.example.progo.data.entities.ExerciseRoutine.exerciseRoutineCrossRef
+import com.example.progo.data.entities.Exercise
+import com.example.progo.data.entities.ExerciseRoutine.ExerciseRoutineCrossRef
 import com.example.progo.data.entities.ExerciseRoutine.ExerciseWithRoutine
-import com.example.progo.data.entities.routine
-import com.example.progo.data.entities.ExerciseRoutine.routineWithExercise
+import com.example.progo.data.entities.Routine
+import com.example.progo.data.entities.ExerciseRoutine.RoutineWithExercise
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExerciseRoutineDao {
 
     @Upsert
-    suspend fun upsertExercise(exercise: exercise)
+    suspend fun upsertExercise(exercise: Exercise)
 
     @Upsert
-    suspend fun upsertRoutine(routine: routine)
+    suspend fun upsertRoutine(routine: Routine)
 
     @Delete
-    suspend fun deleteExercise(exercise: exercise)
+    suspend fun deleteExercise(exercise: Exercise)
 
     @Delete
-    suspend fun deleteRoutine(routine: routine)
+    suspend fun deleteRoutine(routine: Routine)
 
-    @Query("DELETE FROM exerciseRoutineCrossRef WHERE routineName = :routineName")
+    @Query("DELETE FROM ExerciseRoutineCrossRef WHERE routineName = :routineName")
     suspend fun deleteCrossRef(routineName: String)
 
-    suspend fun deleteRoutineWithCrossRef(routine: routine) {
+    suspend fun deleteRoutineWithCrossRef(routine: Routine) {
         deleteCrossRef(routine.routineName)
         deleteRoutine(routine)
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertExerciseRoutineCrossRef(crossRef: exerciseRoutineCrossRef)
+    suspend fun insertExerciseRoutineCrossRef(crossRef: ExerciseRoutineCrossRef)
 
-    @Query("SELECT * FROM routine ORDER BY routineName ASC")
-    fun readAllDataRoutine(): Flow<List<routine>>
+    @Query("SELECT * FROM Routine ORDER BY routineName ASC")
+    fun readAllDataRoutine(): Flow<List<Routine>>
 
-    @Query("SELECT * FROM exercise ORDER BY exerciseName ASC")
-    fun readAllDataExercise(): Flow<List<exercise>>
-
-    @Transaction
-    @Query("SELECT * FROM routine WHERE routineName = :routineName")
-    fun getRoutineWithExercise(routineName: String): List<routineWithExercise>
+    @Query("SELECT * FROM Exercise ORDER BY exerciseName ASC")
+    fun readAllDataExercise(): Flow<List<Exercise>>
 
     @Transaction
-    @Query("SELECT * FROM exercise WHERE exerciseName = :exerciseName")
+    @Query("SELECT * FROM Routine WHERE routineName = :routineName")
+    fun getRoutineWithExercise(routineName: String): List<RoutineWithExercise>
+
+    @Transaction
+    @Query("SELECT * FROM Exercise WHERE exerciseName = :exerciseName")
     fun getExerciseWithRoutine(exerciseName: String): List<ExerciseWithRoutine>
 
     @Transaction
-    suspend fun insertRoutineWithExercises(routine: routine, exercises: List<exercise>, sets: Int) {
+    suspend fun insertRoutineWithExercises(routine: Routine, exercises: List<Exercise>, sets: Int) {
         upsertRoutine(routine)
         exercises.forEach { exercise ->
             upsertExercise(exercise)
-            val crossRef = exerciseRoutineCrossRef(exerciseName = exercise.exerciseName, routineName = routine.routineName, sets = sets)
+            val crossRef = ExerciseRoutineCrossRef(exerciseName = exercise.exerciseName, routineName = routine.routineName, sets = sets)
             insertExerciseRoutineCrossRef(crossRef)
         }
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDefaultExercises(exercises: List<exercise>)
+    suspend fun insertDefaultExercises(exercises: List<Exercise>)
 }

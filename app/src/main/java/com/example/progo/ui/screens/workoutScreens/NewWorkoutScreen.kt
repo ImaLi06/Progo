@@ -22,8 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.progo.data.entities.exercise
-import com.example.progo.data.entities.routine
+import com.example.progo.data.entities.Exercise
 import com.example.progo.ui.component.PrincipalTextLabel
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.SecondaryTextLabel
@@ -37,7 +36,7 @@ import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 fun MainWorkoutScreen(
     navController: NavController,
     viewModel: ExerciseRoutineViewModel,
-    exerciseList: List<exercise>,
+    exerciseList: List<Exercise>,
     routineName: String,
     sharedViewModel: ExerciseRoutineSharedViewModel
 ){
@@ -60,7 +59,7 @@ fun MainWorkoutContent(
     paddingValues: PaddingValues,
     navController: NavController,
     viewModel: ExerciseRoutineViewModel,
-    exerciseList: List<exercise>,
+    exerciseList: List<Exercise>,
     routineName: String,
     sharedViewModel: ExerciseRoutineSharedViewModel
 ){
@@ -95,14 +94,7 @@ fun MainWorkoutContent(
             PrincipalButton(
                 text = "Agregar Rutina",
                 onClick = {
-                    val trimRoutineName = routineName.trim()
-                    if(trimRoutineName.isNotEmpty()) {
-                        viewModel.insertRoutineWithExercises(
-                            routine = routine(routineName = routineName),
-                            exercises = exerciseList
-                        )
-                        navController.popBackStack()
-                    }
+
                 },
                 height = 60,
                 width = 350
@@ -112,7 +104,7 @@ fun MainWorkoutContent(
 }
 
 @Composable
-fun Input(item: exercise){
+fun Input(item: Exercise){
     var aux: String
     Column(modifier = Modifier
         .clip(shape = RoundedCornerShape(15.dp))
@@ -133,7 +125,7 @@ fun Input(item: exercise){
                 modifier = Modifier.width(50.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text("${item.weight} X ${item.reps}")
+                Text("pe X rep")
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally

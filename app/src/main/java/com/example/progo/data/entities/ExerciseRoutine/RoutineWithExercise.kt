@@ -6,12 +6,13 @@ import androidx.room.Relation
 import com.example.progo.data.entities.Exercise
 import com.example.progo.data.entities.Routine
 
-data class ExerciseWithRoutine(
-    @Embedded val exercise: Exercise,
+data class RoutineWithExercise(
+    @Embedded val routine: Routine,
     @Relation(
-        parentColumn = "exerciseName",
-        entityColumn = "routineName",
+        parentColumn = "routineName",
+        entityColumn = "exerciseName",
         associateBy = Junction(ExerciseRoutineCrossRef::class)
     )
-    val workoutRoutines: List<Routine>
+
+    val gymExercises: List<Exercise>
 )

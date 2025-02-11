@@ -10,11 +10,9 @@ import com.example.progo.ui.screens.informationScreens.InformationScreen
 import com.example.progo.ui.screens.profileScreens.ProfileScreen
 import com.example.progo.ui.screens.workoutScreens.WorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
-import com.example.progo.ui.viewmodel.HomeSharedViewModel
 
 @Composable
 fun HomeNavGraph(navController: NavHostController, paddingValues: PaddingValues, viewModel: ExerciseRoutineViewModel) {
-    val homeSharedViewModel = navController.currentBackStackEntry?.sharedViewModel<HomeSharedViewModel>(navController)
     NavHost(
         navController = navController,
         route = Graph.HOME,
@@ -29,8 +27,6 @@ fun HomeNavGraph(navController: NavHostController, paddingValues: PaddingValues,
         composable(route = navigationItems.Information.route) {
             InformationScreen(paddingValues = paddingValues)
         }
-        if(homeSharedViewModel != null){
-            workoutNavGraph(navController = navController, viewModel = viewModel, homeSharedViewModel = homeSharedViewModel)
-        }
+        workoutNavGraph(navController = navController, viewModel = viewModel)
     }
 }
