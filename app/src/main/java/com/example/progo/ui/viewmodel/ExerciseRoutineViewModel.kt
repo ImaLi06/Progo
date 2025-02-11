@@ -45,7 +45,7 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
             Exercise(exerciseName = "Leg Extension"),
             Exercise(exerciseName = "Pull Over")
         )
-        repository.AddDefaultExercises(defaultExercises)
+        repository.addDefaultExercises(defaultExercises)
     }
 
     fun addExercise(exercise: Exercise) {
@@ -66,7 +66,11 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
         return repositoryRecord.getRoutineRecordWithExercise(routineRecordId)
     }
 
-    fun insertRoutineWithExercises(routine: Routine, exercises: List<Exercise>, sets: Int) {
+    fun getSetsExerciseRoutine(routineName: String): List<Int>{
+        return repository.getSetsExerciseRoutine(routineName)
+    }
+
+    fun insertRoutineWithExercises(routine: Routine, exercises: List<Exercise>, sets: List<Int>) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertRoutineWithExercises(routine, exercises, sets)
         }

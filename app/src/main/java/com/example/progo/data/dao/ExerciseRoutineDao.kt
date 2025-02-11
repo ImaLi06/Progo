@@ -55,11 +55,19 @@ interface ExerciseRoutineDao {
     fun getExerciseWithRoutine(exerciseName: String): List<ExerciseWithRoutine>
 
     @Transaction
-    suspend fun insertRoutineWithExercises(routine: Routine, exercises: List<Exercise>, sets: Int) {
+    @Query("SELECT sets FROM ExerciseRoutineCrossRef WHERE routineName = :routineName")
+    fun getSetsExerciseRoutine(routineName: String): List<Int>
+
+    @Transaction
+    suspend fun insertRoutineWithExercises(routine: Routine, exercises: List<Exercise>, sets: List<Int>) {
         upsertRoutine(routine)
-        exercises.forEach { exercise ->
+        exercises.forEachIndexed() { index, exercise ->
             upsertExercise(exercise)
-            val crossRef = ExerciseRoutineCrossRef(exerciseName = exercise.exerciseName, routineName = routine.routineName, sets = sets)
+            val crossRef = ExerciseRoutineCrossRef(
+                exerciseName = exercise.exerciseName,
+                routineName = routine.routineName,
+                sets = sets[index]
+            )
             insertExerciseRoutineCrossRef(crossRef)
         }
     }

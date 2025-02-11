@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,9 +40,10 @@ import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 fun MainWorkoutScreen(
     navController: NavController,
     viewModel: ExerciseRoutineViewModel,
+    sharedViewModel: ExerciseRoutineSharedViewModel,
     exerciseList: List<Exercise>,
     routineName: String,
-    sharedViewModel: ExerciseRoutineSharedViewModel
+    setsList: List<Int>
 ){
     Scaffold(
         topBar = { ProgoTopBar(navController)}
@@ -49,7 +54,8 @@ fun MainWorkoutScreen(
             viewModel = viewModel,
             exerciseList = exerciseList,
             routineName = routineName,
-            sharedViewModel = sharedViewModel
+            sharedViewModel = sharedViewModel,
+            setsList = setsList
         )
     }
 }
@@ -61,7 +67,8 @@ fun MainWorkoutContent(
     viewModel: ExerciseRoutineViewModel,
     exerciseList: List<Exercise>,
     routineName: String,
-    sharedViewModel: ExerciseRoutineSharedViewModel
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    setsList: List<Int>
 ){
 
     LazyColumn(
@@ -79,8 +86,8 @@ fun MainWorkoutContent(
                 width = 350
             )
         }
-        items(exerciseList) {
-            item -> Input(item)
+        itemsIndexed(exerciseList) { index, item ->
+            Input(item, index, sharedViewModel = sharedViewModel, setsList = setsList)
         }
         item {
             AddExerciseButton(
@@ -104,8 +111,13 @@ fun MainWorkoutContent(
 }
 
 @Composable
-fun Input(item: Exercise){
-    var aux: String
+fun Input(
+    item: Exercise,
+    index: Int,
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    setsList: List<Int>
+){
+    var aux: String = ""
     Column(modifier = Modifier
         .clip(shape = RoundedCornerShape(15.dp))
         .background(MaterialTheme.colorScheme.secondary)
@@ -115,34 +127,67 @@ fun Input(item: Exercise){
         Row{
             Spacer(modifier = Modifier.size(25.dp, 10.dp))
             SecondaryTextTemplate(item.exerciseName, 20)
+            IconButton(
+                onClick = {sharedViewModel.addSet(index)}
+            ) { Icon(Icons.Default.Add, contentDescription = "Add set")}
         }
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.size(10.dp))
-            Column(
-                modifier = Modifier.width(50.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text("pe X rep")
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                Text("Peso")
-                Spacer(modifier = Modifier.size(10.dp))
-                SecondaryTextLabel("", {aux = it}, 30, 100)
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                Text("Repeticiones")
-                Spacer(modifier = Modifier.size(10.dp))
-                SecondaryTextLabel("", {aux = it}, 30, 100)
-            }
+            LastRecord(sets = sharedViewModel.getSets(index))
+            Weight(value = aux, sets = sharedViewModel.getSets(index)) {aux = it}
+            Reps(value = aux, sets = sharedViewModel.getSets(index)) {aux = it}
         }
         Spacer(modifier = Modifier.size(25.dp, 10.dp))
+    }
+}
+
+@Composable
+fun LastRecord(sets: Int?){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text("Record")
+        Spacer(modifier = Modifier.size(10.dp))
+        if(sets != null){
+            repeat(sets){
+                Text("0x0")
+                Spacer(modifier = Modifier.size(10.dp, 26.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun Weight(value: String, sets: Int?, onValueChange: (String) -> Unit){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Text("Peso")
+        Spacer(modifier = Modifier.size(10.dp))
+        if(sets != null){
+            repeat(sets){
+                SecondaryTextLabel(value = value, onValueChange = onValueChange, 30, 100)
+                Spacer(modifier = Modifier.size(10.dp, 20.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun Reps(value: String,sets: Int?, onValueChange: (String) -> Unit){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Text("Repeticiones")
+        Spacer(modifier = Modifier.size(10.dp))
+        if(sets != null){
+            repeat(sets){
+                SecondaryTextLabel(value = value, onValueChange = onValueChange, 30, 100)
+                Spacer(modifier = Modifier.size(10.dp, 20.dp))
+            }
+        }
     }
 }
 

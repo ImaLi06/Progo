@@ -10,5 +10,5 @@ import androidx.room.Index
 data class ExerciseRoutineCrossRef(
     val exerciseName: String,
     val routineName: String,
-    val sets: Int
+    val sets: Int = 1
 )

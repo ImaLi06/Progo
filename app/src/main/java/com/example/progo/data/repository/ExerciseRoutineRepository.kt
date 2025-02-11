@@ -37,11 +37,15 @@ class ExerciseRoutineRepository(private val exerciseRoutineDao: ExerciseRoutineD
         return exerciseRoutineDao.getExerciseWithRoutine(exerciseName)
     }
 
-    suspend fun insertRoutineWithExercises(routine: Routine, exercises: List<Exercise>, sets: Int) {
+    fun getSetsExerciseRoutine(routineName: String): List<Int>{
+        return exerciseRoutineDao.getSetsExerciseRoutine(routineName)
+    }
+
+    suspend fun insertRoutineWithExercises(routine: Routine, exercises: List<Exercise>, sets: List<Int>) {
         exerciseRoutineDao.insertRoutineWithExercises(routine, exercises, sets)
     }
 
-    suspend fun AddDefaultExercises(exercises: List<Exercise>){
+    suspend fun addDefaultExercises(exercises: List<Exercise>){
         exerciseRoutineDao.insertDefaultExercises(exercises)
     }
 }

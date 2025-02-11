@@ -31,13 +31,15 @@ fun NavGraphBuilder.workoutNavGraph(
             val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
             val state by sharedViewModel.sharedExerciseList.collectAsStateWithLifecycle()
             val name by sharedViewModel.sharedRoutineName.collectAsStateWithLifecycle()
+            val sets by sharedViewModel.sharedExerciseSetsList.collectAsStateWithLifecycle()
 
             MainWorkoutScreen(
                 navController = navController,
                 viewModel = viewModel,
+                sharedViewModel = sharedViewModel,
                 exerciseList = state,
                 routineName = name,
-                sharedViewModel = sharedViewModel
+                setsList = sets
             )
         }
         composable(route = WorkoutScreen.exerciseList.route) { entry ->
