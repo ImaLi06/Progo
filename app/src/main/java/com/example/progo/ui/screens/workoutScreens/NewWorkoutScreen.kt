@@ -21,6 +21,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,7 +48,9 @@ fun MainWorkoutScreen(
     sharedViewModel: ExerciseRoutineSharedViewModel,
     exerciseList: List<Exercise>,
     routineName: String,
-    setsList: List<Int>
+    setsList: List<Int>,
+    repsValues: List<List<String>>,
+    weightValues: List<List<String>>
 ){
     Scaffold(
         topBar = { ProgoTopBar(navController)}
@@ -55,7 +62,9 @@ fun MainWorkoutScreen(
             exerciseList = exerciseList,
             routineName = routineName,
             sharedViewModel = sharedViewModel,
-            setsList = setsList
+            setsList = setsList,
+            repsValues = repsValues,
+            weightValues = weightValues
         )
     }
 }
@@ -68,7 +77,9 @@ fun MainWorkoutContent(
     exerciseList: List<Exercise>,
     routineName: String,
     sharedViewModel: ExerciseRoutineSharedViewModel,
-    setsList: List<Int>
+    setsList: List<Int>,
+    repsValues: List<List<String>>,
+    weightValues: List<List<String>>
 ){
 
     LazyColumn(
@@ -87,7 +98,12 @@ fun MainWorkoutContent(
             )
         }
         itemsIndexed(exerciseList) { index, item ->
-            Input(item, index, sharedViewModel = sharedViewModel, setsList = setsList)
+            Input(
+                item, index,
+                sharedViewModel = sharedViewModel,
+                repsValues = repsValues,
+                weightValues = weightValues
+            )
         }
         item {
             AddExerciseButton(
@@ -100,9 +116,7 @@ fun MainWorkoutContent(
         item {
             PrincipalButton(
                 text = "Agregar Rutina",
-                onClick = {
-
-                },
+                onClick = {},
                 height = 60,
                 width = 350
             )
@@ -115,7 +129,8 @@ fun Input(
     item: Exercise,
     index: Int,
     sharedViewModel: ExerciseRoutineSharedViewModel,
-    setsList: List<Int>
+    repsValues: List<List<String>>,
+    weightValues: List<List<String>>
 ){
     var aux: String = ""
     Column(modifier = Modifier
@@ -136,8 +151,18 @@ fun Input(
         ) {
             Spacer(modifier = Modifier.size(10.dp))
             LastRecord(sets = sharedViewModel.getSets(index))
-            Weight(value = aux, sets = sharedViewModel.getSets(index)) {aux = it}
-            Reps(value = aux, sets = sharedViewModel.getSets(index)) {aux = it}
+            Weight(
+                sets = sharedViewModel.getSets(index),
+                sharedViewModel = sharedViewModel,
+                sectionIndex = index,
+                weightValues = weightValues
+            )
+            Reps(
+                sets = sharedViewModel.getSets(index),
+                sectionIndex = index,
+                sharedViewModel = sharedViewModel,
+                repsValues = repsValues
+            )
         }
         Spacer(modifier = Modifier.size(25.dp, 10.dp))
     }
@@ -152,23 +177,36 @@ fun LastRecord(sets: Int?){
         Spacer(modifier = Modifier.size(10.dp))
         if(sets != null){
             repeat(sets){
+                Spacer(modifier = Modifier.size(10.dp, 10.dp))
                 Text("0x0")
-                Spacer(modifier = Modifier.size(10.dp, 26.dp))
+                Spacer(modifier = Modifier.size(10.dp, 36.dp))
             }
         }
     }
 }
 
 @Composable
-fun Weight(value: String, sets: Int?, onValueChange: (String) -> Unit){
+fun Weight(
+    sets: Int?,
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    sectionIndex: Int,
+    weightValues: List<List<String>>
+){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text("Peso")
         Spacer(modifier = Modifier.size(10.dp))
         if(sets != null){
-            repeat(sets){
-                SecondaryTextLabel(value = value, onValueChange = onValueChange, 30, 100)
+            repeat(sets){index ->
+                SecondaryTextLabel(
+                    value = weightValues.getOrNull(sectionIndex)?.getOrNull(index) ?: "",
+                    onValueChange = { newValue ->
+                        sharedViewModel.updateWeightLabelValue(sectionIndex, index, newValue)
+                    },
+                    50,
+                    100
+                )
                 Spacer(modifier = Modifier.size(10.dp, 20.dp))
             }
         }
@@ -176,15 +214,27 @@ fun Weight(value: String, sets: Int?, onValueChange: (String) -> Unit){
 }
 
 @Composable
-fun Reps(value: String,sets: Int?, onValueChange: (String) -> Unit){
+fun Reps(
+    sets: Int?,
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    sectionIndex: Int,
+    repsValues: List<List<String>>
+){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text("Repeticiones")
         Spacer(modifier = Modifier.size(10.dp))
         if(sets != null){
-            repeat(sets){
-                SecondaryTextLabel(value = value, onValueChange = onValueChange, 30, 100)
+            repeat(sets){index ->
+                SecondaryTextLabel(
+                    value = repsValues.getOrNull(sectionIndex)?.getOrNull(index) ?: "",
+                    onValueChange = {newValue ->
+                        sharedViewModel.updateRepsLabelValue(sectionIndex, index, newValue)
+                    },
+                    50,
+                    100
+                )
                 Spacer(modifier = Modifier.size(10.dp, 20.dp))
             }
         }
