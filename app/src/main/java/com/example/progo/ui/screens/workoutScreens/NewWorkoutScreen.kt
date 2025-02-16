@@ -1,20 +1,31 @@
 package com.example.progo.ui.screens.workoutScreens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +33,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -48,7 +58,6 @@ fun MainWorkoutScreen(
     sharedViewModel: ExerciseRoutineSharedViewModel,
     exerciseList: List<Exercise>,
     routineName: String,
-    setsList: List<Int>,
     repsValues: List<List<String>>,
     weightValues: List<List<String>>
 ){
@@ -62,9 +71,8 @@ fun MainWorkoutScreen(
             exerciseList = exerciseList,
             routineName = routineName,
             sharedViewModel = sharedViewModel,
-            setsList = setsList,
             repsValues = repsValues,
-            weightValues = weightValues
+            weightValues = weightValues,
         )
     }
 }
@@ -77,9 +85,8 @@ fun MainWorkoutContent(
     exerciseList: List<Exercise>,
     routineName: String,
     sharedViewModel: ExerciseRoutineSharedViewModel,
-    setsList: List<Int>,
     repsValues: List<List<String>>,
-    weightValues: List<List<String>>
+    weightValues: List<List<String>>,
 ){
 
     LazyColumn(
@@ -87,14 +94,14 @@ fun MainWorkoutContent(
             .padding(paddingValues)
             .fillMaxSize(),
         contentPadding = PaddingValues(all = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(5.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         item {
             RoutineNameTextLabel(
                 routineName,
                 {sharedViewModel.updateText(it)},
                 height = 50,
-                width = 350
+                width = 400
             )
         }
         itemsIndexed(exerciseList) { index, item ->
@@ -102,7 +109,8 @@ fun MainWorkoutContent(
                 item, index,
                 sharedViewModel = sharedViewModel,
                 repsValues = repsValues,
-                weightValues = weightValues
+                weightValues = weightValues,
+                exerciseListSize = exerciseList.size
             )
         }
         item {
@@ -110,7 +118,7 @@ fun MainWorkoutContent(
                 text = "Agregar Ejercicio",
                 onClick = {navController.navigate(WorkoutScreen.exerciseList.route)},
                 height = 60,
-                width = 350
+                width = 400
             )
         }
         item {
@@ -118,7 +126,7 @@ fun MainWorkoutContent(
                 text = "Agregar Rutina",
                 onClick = {},
                 height = 60,
-                width = 350
+                width = 400
             )
         }
     }
@@ -130,41 +138,63 @@ fun Input(
     index: Int,
     sharedViewModel: ExerciseRoutineSharedViewModel,
     repsValues: List<List<String>>,
-    weightValues: List<List<String>>
+    weightValues: List<List<String>>,
+    exerciseListSize: Int
 ){
-    var aux: String = ""
-    Column(modifier = Modifier
-        .clip(shape = RoundedCornerShape(15.dp))
-        .background(MaterialTheme.colorScheme.secondary)
-        .width(350.dp),
+    Row(
+        modifier = Modifier
+            .clip(shape = RoundedCornerShape(15.dp))
+            .background(MaterialTheme.colorScheme.secondary)
+            .width(400.dp),
     ) {
-        Spacer(modifier = Modifier.size(25.dp, 10.dp))
-        Row{
-            Spacer(modifier = Modifier.size(25.dp, 10.dp))
-            SecondaryTextTemplate(item.exerciseName, 20)
-            IconButton(
-                onClick = {sharedViewModel.addSet(index)}
-            ) { Icon(Icons.Default.Add, contentDescription = "Add set")}
-        }
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(40.dp),
+            verticalArrangement = Arrangement.Center,
         ) {
-            Spacer(modifier = Modifier.size(10.dp))
-            LastRecord(sets = sharedViewModel.getSets(index))
-            Weight(
-                sets = sharedViewModel.getSets(index),
-                sharedViewModel = sharedViewModel,
-                sectionIndex = index,
-                weightValues = weightValues
-            )
-            Reps(
-                sets = sharedViewModel.getSets(index),
-                sectionIndex = index,
-                sharedViewModel = sharedViewModel,
-                repsValues = repsValues
-            )
+            if(index > 0){
+                IconButton(
+                    onClick = {sharedViewModel.swapExercises(index1 = index, index2 = index - 1)},
+                ) { Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Up", tint = MaterialTheme.colorScheme.onSecondary)}
+            }
+            if(index < exerciseListSize - 1){
+                IconButton(
+                    onClick = {sharedViewModel.swapExercises(index1 = index, index2 = index + 1)}
+                ) { Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Down", tint = MaterialTheme.colorScheme.onSecondary)}
+            }
         }
-        Spacer(modifier = Modifier.size(25.dp, 10.dp))
+        Column {
+            Spacer(modifier = Modifier.size(25.dp, 15.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                //Spacer(modifier = Modifier.size(25.dp, 10.dp))
+                SecondaryTextTemplate(item.exerciseName, 20)
+                InputAdditionalOptions(index = index, sharedViewModel = sharedViewModel)
+            }
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Spacer(modifier = Modifier.size(10.dp))
+                LastRecord(sets = sharedViewModel.getSets(index))
+                Weight(
+                    sets = sharedViewModel.getSets(index),
+                    sharedViewModel = sharedViewModel,
+                    sectionIndex = index,
+                    weightValues = weightValues
+                )
+                Reps(
+                    sets = sharedViewModel.getSets(index),
+                    sectionIndex = index,
+                    sharedViewModel = sharedViewModel,
+                    repsValues = repsValues
+                )
+            }
+            Spacer(modifier = Modifier.size(25.dp, 10.dp))
+        }
     }
 }
 
@@ -237,6 +267,24 @@ fun Reps(
                 )
                 Spacer(modifier = Modifier.size(10.dp, 20.dp))
             }
+        }
+    }
+}
+
+@Composable
+fun InputAdditionalOptions(index: Int, sharedViewModel: ExerciseRoutineSharedViewModel){
+    var expanded by remember { mutableStateOf(false)}
+    Box{
+        IconButton(onClick = { expanded = true }) {
+            Icon(Icons.Default.MoreVert, contentDescription = "Más opciones", tint = MaterialTheme.colorScheme.onSecondary)
+        }
+        DropdownMenu(expanded = expanded, onDismissRequest = {expanded = false}) {
+            DropdownMenuItem(onClick = {sharedViewModel.addSet(index)}, text = {Text("Agregar set")})
+            val setNum = sharedViewModel.getSets(index)
+            if(setNum != null && setNum > 1){
+                DropdownMenuItem(onClick = {sharedViewModel.deleteSet(index)}, text = { Text("Eliminar set")})
+            }
+            DropdownMenuItem(onClick = {sharedViewModel.removeExercise(index)}, text = { Text("Eliminar ejercicio")})
         }
     }
 }

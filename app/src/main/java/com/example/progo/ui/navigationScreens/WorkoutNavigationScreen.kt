@@ -41,7 +41,6 @@ fun NavGraphBuilder.workoutNavGraph(
                 sharedViewModel = sharedViewModel,
                 exerciseList = state,
                 routineName = name,
-                setsList = sets,
                 repsValues = repsValues,
                 weightValues = weightValues
             )

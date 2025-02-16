@@ -83,7 +83,7 @@ fun RoutinePreVisualization(item: Routine, viewModel: ExerciseRoutineViewModel, 
                     text = item.routineName,
                     color = MaterialTheme.colorScheme.onSecondary
                 )
-                AdditionalOptions(viewModel = viewModel, item = item, navController = navController)
+                WorkOutAdditionalOptions(viewModel = viewModel, item = item, navController = navController)
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -114,7 +114,7 @@ fun CreateNewRoutineButton(navController: NavController){
 }
 
 @Composable
-fun AdditionalOptions(viewModel: ExerciseRoutineViewModel, item: Routine, navController: NavController){
+fun WorkOutAdditionalOptions(viewModel: ExerciseRoutineViewModel, item: Routine, navController: NavController){
     var expanded by remember { mutableStateOf(false) }
 
     Box {
