@@ -17,10 +17,11 @@ import com.example.progo.ui.screens.workoutScreens.NewExerciseScreen
 import com.example.progo.ui.screens.workoutScreens.MainWorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
+import com.example.progo.ui.viewmodel.HomeSharedViewModel
 
 fun NavGraphBuilder.workoutNavGraph(
     navController: NavHostController,
-    viewModel: ExerciseRoutineViewModel
+    viewModel: ExerciseRoutineViewModel,
 ) {
     navigation(
         route = Graph.WORKOUT,
@@ -42,7 +43,8 @@ fun NavGraphBuilder.workoutNavGraph(
                 exerciseList = state,
                 routineName = name,
                 repsValues = repsValues,
-                weightValues = weightValues
+                weightValues = weightValues,
+                sets = sets
             )
         }
         composable(route = WorkoutScreen.exerciseList.route) { entry ->

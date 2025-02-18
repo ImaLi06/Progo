@@ -1,18 +1,21 @@
 package com.example.progo.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.progo.data.navigationItems
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class HomeSharedViewModel(): ViewModel(){
-    private val _modeWorkout = MutableStateFlow("")
+    private val _modeWorkout = MutableStateFlow("a")
     val modeWorkout = _modeWorkout.asStateFlow()
+    private val _createdRoutineName = MutableStateFlow("")
+    val createdRoutineName = _createdRoutineName.asStateFlow()
 
     fun establishMode(mode: String){
-        when(mode){
-            "edit" -> _modeWorkout.value = "edit"
-            "start" -> _modeWorkout.value = "start"
-        }
+        _modeWorkout.value = mode
+        println(_modeWorkout.value)
+    }
+
+    fun establishCreatedRoutineName(name: String){
+        _createdRoutineName.value = name
     }
 }

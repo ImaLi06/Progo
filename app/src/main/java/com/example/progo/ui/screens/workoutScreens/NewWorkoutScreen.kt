@@ -40,8 +40,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.progo.data.entities.Exercise
+import com.example.progo.data.entities.Routine
 import com.example.progo.ui.component.PrincipalTextLabel
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.SecondaryTextLabel
@@ -50,6 +52,7 @@ import com.example.progo.ui.component.ProgoTopBar
 import com.example.progo.ui.navigationScreens.WorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
+import com.example.progo.ui.viewmodel.HomeSharedViewModel
 
 @Composable
 fun MainWorkoutScreen(
@@ -59,7 +62,8 @@ fun MainWorkoutScreen(
     exerciseList: List<Exercise>,
     routineName: String,
     repsValues: List<List<String>>,
-    weightValues: List<List<String>>
+    weightValues: List<List<String>>,
+    sets: List<Int>
 ){
     Scaffold(
         topBar = { ProgoTopBar(navController)}
@@ -73,6 +77,7 @@ fun MainWorkoutScreen(
             sharedViewModel = sharedViewModel,
             repsValues = repsValues,
             weightValues = weightValues,
+            sets = sets
         )
     }
 }
@@ -87,6 +92,7 @@ fun MainWorkoutContent(
     sharedViewModel: ExerciseRoutineSharedViewModel,
     repsValues: List<List<String>>,
     weightValues: List<List<String>>,
+    sets: List<Int>
 ){
 
     LazyColumn(
@@ -124,7 +130,17 @@ fun MainWorkoutContent(
         item {
             PrincipalButton(
                 text = "Agregar Rutina",
-                onClick = {},
+                onClick = {
+                    val trimRoutineName = routineName.trim()
+                    if(trimRoutineName.isNotEmpty()){
+                        viewModel.insertRoutineWithExercises(
+                            routine = Routine(routineName = routineName),
+                            exercises = exerciseList,
+                            sets = sets
+                        )
+                        navController.popBackStack()
+                    }
+                },
                 height = 60,
                 width = 400
             )

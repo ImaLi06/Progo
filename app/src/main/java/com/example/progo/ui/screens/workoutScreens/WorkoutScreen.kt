@@ -38,9 +38,14 @@ import com.example.progo.data.entities.Routine
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.navigationScreens.Graph
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
+import com.example.progo.ui.viewmodel.HomeSharedViewModel
 
 @Composable
-fun WorkoutScreen(navController: NavController, paddingValues: PaddingValues, viewModel: ExerciseRoutineViewModel){
+fun WorkoutScreen(
+    navController: NavController,
+    paddingValues: PaddingValues,
+    viewModel: ExerciseRoutineViewModel
+){
 
     val auxRoutineList by viewModel.allRoutines.collectAsState(initial = emptyList())
 
@@ -57,13 +62,21 @@ fun WorkoutScreen(navController: NavController, paddingValues: PaddingValues, vi
             CreateNewRoutineButton(navController = navController)
         }
         items(auxRoutineList){ item ->
-            RoutinePreVisualization(item, viewModel = viewModel, navController = navController)
+            RoutinePreVisualization(
+                item,
+                viewModel = viewModel,
+                navController = navController
+            )
         }
     }
 }
 
 @Composable
-fun RoutinePreVisualization(item: Routine, viewModel: ExerciseRoutineViewModel, navController: NavController){
+fun RoutinePreVisualization(
+    item: Routine,
+    viewModel: ExerciseRoutineViewModel,
+    navController: NavController,
+){
     Button(
         onClick = {},
         colors = ButtonDefaults.buttonColors(
@@ -90,7 +103,9 @@ fun RoutinePreVisualization(item: Routine, viewModel: ExerciseRoutineViewModel, 
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = {},
+                    onClick = {
+                        navController.navigate(Graph.WORKOUT)
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Green),
                     shape = RoundedCornerShape(15.dp)
                 ) {
