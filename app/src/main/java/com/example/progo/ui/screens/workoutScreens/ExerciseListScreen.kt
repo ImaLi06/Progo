@@ -30,7 +30,7 @@ import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 fun ExerciseListScreen(
     navController: NavController,
     viewModel: ExerciseRoutineViewModel,
-    sharedViewModel: ExerciseRoutineSharedViewModel
+    sharedViewModel: ExerciseRoutineSharedViewModel,
 ){
     Scaffold(
         topBar = { ProgoTopBar(navController) }
@@ -39,7 +39,7 @@ fun ExerciseListScreen(
             paddingValues = it,
             navController = navController,
             viewModel = viewModel,
-            sharedViewModel = sharedViewModel
+            sharedViewModel = sharedViewModel,
         )
     }
 }
@@ -49,9 +49,9 @@ fun ExerciseListContent(
     paddingValues: PaddingValues,
     navController: NavController,
     viewModel: ExerciseRoutineViewModel,
-    sharedViewModel: ExerciseRoutineSharedViewModel
+    sharedViewModel: ExerciseRoutineSharedViewModel,
 ){
-    val exerciseList by viewModel.allExercises.collectAsState(initial = emptyList())
+    val existentExerciseList by viewModel.allExercises.collectAsState(initial = emptyList())
 
     LazyColumn(
         modifier = Modifier
@@ -60,8 +60,12 @@ fun ExerciseListContent(
         verticalArrangement = Arrangement.spacedBy(5.dp),
         contentPadding = PaddingValues(all = 20.dp)
     ) {
-        items(exerciseList){
-            item -> Exercises(item = item, sharedViewModel = sharedViewModel, navController = navController)
+        items(existentExerciseList){
+            item -> Exercises(
+                item = item,
+                sharedViewModel = sharedViewModel,
+                navController = navController,
+            )
         }
         item {
             PrincipalButton(
@@ -75,7 +79,11 @@ fun ExerciseListContent(
 }
 
 @Composable
-fun Exercises(item: Exercise, sharedViewModel: ExerciseRoutineSharedViewModel, navController: NavController){
+fun Exercises(
+    item: Exercise,
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    navController: NavController,
+){
     Button(
         onClick = {
             sharedViewModel.addExercise(item)

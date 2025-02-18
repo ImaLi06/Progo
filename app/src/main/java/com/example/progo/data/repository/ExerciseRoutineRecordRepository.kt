@@ -22,6 +22,11 @@ class ExerciseRoutineRecordRepository(private val exerciseRoutineRecordDao: Exer
         exerciseRoutineRecordDao.insertRoutineRecordWithExercises(routineRecord, exercisesRecord)
     }
 
+    suspend fun getLastNRecords(exerciseList: List<Exercise>, sets: List<Int>)
+    :  Pair<List<List<Int>>, List<List<Float>>>{
+        return exerciseRoutineRecordDao.getLastNRecords(exerciseList, sets)
+    }
+
     fun getRoutineRecordWithExercise(routineRecordId: Int): List<RoutineRecordWithExercise>{
         return exerciseRoutineRecordDao.getRoutineRecordWithExercise(routineRecordId)
     }

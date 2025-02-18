@@ -1,8 +1,6 @@
 package com.example.progo.ui.screens.workoutScreens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.MoreVert
@@ -32,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.progo.data.entities.Exercise
 import com.example.progo.data.entities.Routine
@@ -52,10 +49,9 @@ import com.example.progo.ui.component.ProgoTopBar
 import com.example.progo.ui.navigationScreens.WorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
-import com.example.progo.ui.viewmodel.HomeSharedViewModel
 
 @Composable
-fun MainWorkoutScreen(
+fun NewWorkoutScreen(
     navController: NavController,
     viewModel: ExerciseRoutineViewModel,
     sharedViewModel: ExerciseRoutineSharedViewModel,
@@ -68,7 +64,7 @@ fun MainWorkoutScreen(
     Scaffold(
         topBar = { ProgoTopBar(navController)}
     ) {
-        MainWorkoutContent(
+        NewWorkoutContent(
             paddingValues = it,
             navController = navController,
             viewModel = viewModel,
@@ -83,7 +79,7 @@ fun MainWorkoutScreen(
 }
 
 @Composable
-fun MainWorkoutContent(
+fun NewWorkoutContent(
     paddingValues: PaddingValues,
     navController: NavController,
     viewModel: ExerciseRoutineViewModel,
@@ -92,8 +88,12 @@ fun MainWorkoutContent(
     sharedViewModel: ExerciseRoutineSharedViewModel,
     repsValues: List<List<String>>,
     weightValues: List<List<String>>,
-    sets: List<Int>
+    sets: List<Int>,
 ){
+    val auxRepsWeightList by viewModel.lastNRecords.collectAsState()
+    viewModel.getLastNRecords(exerciseList, sets)
+    val repsList = auxRepsWeightList.first
+    val weightsList = auxRepsWeightList.second
 
     LazyColumn(
         modifier = Modifier
@@ -106,17 +106,24 @@ fun MainWorkoutContent(
             RoutineNameTextLabel(
                 routineName,
                 {sharedViewModel.updateText(it)},
-                height = 50,
+                height = 60,
                 width = 400
             )
         }
         itemsIndexed(exerciseList) { index, item ->
+            val repsSubList = repsList.getOrNull(index) ?: emptyList()
+            val weightSubList = weightsList.getOrNull(index) ?: emptyList()
             Input(
                 item, index,
                 sharedViewModel = sharedViewModel,
                 repsValues = repsValues,
                 weightValues = weightValues,
-                exerciseListSize = exerciseList.size
+                exerciseListSize = exerciseList.size,
+                exerciseList = exerciseList,
+                sets = sets,
+                viewModel = viewModel,
+                repsList = repsSubList,
+                weightList = weightSubList
             )
         }
         item {
@@ -155,7 +162,12 @@ fun Input(
     sharedViewModel: ExerciseRoutineSharedViewModel,
     repsValues: List<List<String>>,
     weightValues: List<List<String>>,
-    exerciseListSize: Int
+    exerciseList: List<Exercise>,
+    sets: List<Int>,
+    exerciseListSize: Int,
+    viewModel: ExerciseRoutineViewModel,
+    repsList: List<Int>,
+    weightList: List<Float>
 ){
     Row(
         modifier = Modifier
@@ -189,13 +201,23 @@ fun Input(
             ){
                 //Spacer(modifier = Modifier.size(25.dp, 10.dp))
                 SecondaryTextTemplate(item.exerciseName, 20)
-                InputAdditionalOptions(index = index, sharedViewModel = sharedViewModel)
+                InputAdditionalOptions(
+                    index = index,
+                    sharedViewModel = sharedViewModel,
+                    viewModel = viewModel,
+                    exerciseList = exerciseList,
+                    sets = sets
+                )
             }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 Spacer(modifier = Modifier.size(10.dp))
-                LastRecord(sets = sharedViewModel.getSets(index))
+                LastRecord(
+                    sets = sharedViewModel.getSets(index),
+                    repsList = repsList,
+                    weightList = weightList
+                )
                 Weight(
                     sets = sharedViewModel.getSets(index),
                     sharedViewModel = sharedViewModel,
@@ -215,16 +237,18 @@ fun Input(
 }
 
 @Composable
-fun LastRecord(sets: Int?){
+fun LastRecord(sets: Int?, repsList: List<Int>, weightList: List<Float>){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text("Record")
         Spacer(modifier = Modifier.size(10.dp))
         if(sets != null){
-            repeat(sets){
+            repeat(sets){subIndex ->
+                val weight = weightList.getOrNull(subIndex) ?: 0.0
+                val reps = repsList.getOrNull(subIndex) ?: 0
                 Spacer(modifier = Modifier.size(10.dp, 10.dp))
-                Text("0x0")
+                Text("${weight}x${reps}")
                 Spacer(modifier = Modifier.size(10.dp, 36.dp))
             }
         }
@@ -288,14 +312,25 @@ fun Reps(
 }
 
 @Composable
-fun InputAdditionalOptions(index: Int, sharedViewModel: ExerciseRoutineSharedViewModel){
+fun InputAdditionalOptions(
+    index: Int,
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    viewModel: ExerciseRoutineViewModel,
+    exerciseList: List<Exercise>,
+    sets: List<Int>
+){
     var expanded by remember { mutableStateOf(false)}
     Box{
         IconButton(onClick = { expanded = true }) {
             Icon(Icons.Default.MoreVert, contentDescription = "Más opciones", tint = MaterialTheme.colorScheme.onSecondary)
         }
         DropdownMenu(expanded = expanded, onDismissRequest = {expanded = false}) {
-            DropdownMenuItem(onClick = {sharedViewModel.addSet(index)}, text = {Text("Agregar set")})
+            DropdownMenuItem(
+                onClick = {
+                    sharedViewModel.addSet(index)
+                },
+                text = {Text("Agregar set")}
+            )
             val setNum = sharedViewModel.getSets(index)
             if(setNum != null && setNum > 1){
                 DropdownMenuItem(onClick = {sharedViewModel.deleteSet(index)}, text = { Text("Eliminar set")})

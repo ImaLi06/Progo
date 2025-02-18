@@ -15,6 +15,8 @@ import com.example.progo.data.repository.ExerciseRoutineRecordRepository
 import com.example.progo.data.repository.ExerciseRoutineRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class ExerciseRoutineViewModel(application: Application):AndroidViewModel(application) {
@@ -24,6 +26,9 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
     val allExercises: Flow<List<Exercise>>
     val allRoutines: Flow<List<Routine>>
     val allRoutinesRecord: Flow<List<RoutineRecord>>
+
+    private val _lastNRecords = MutableStateFlow<Pair<List<List<Int>>, List<List<Float>>>>(Pair(emptyList(), emptyList()))
+    val lastNRecords: StateFlow<Pair<List<List<Int>>, List<List<Float>>>> = _lastNRecords
 
     init {
         val exerciseRoutineDao = ProgoDataBase.getProgoDataBase(application).exerciseRoutineDao()
@@ -70,13 +75,20 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
         return repository.getSetsExerciseRoutine(routineName)
     }
 
+    fun getLastNRecords(exerciseList: List<Exercise>, sets: List<Int>){
+        viewModelScope.launch(Dispatchers.IO){
+            val result = repositoryRecord.getLastNRecords(exerciseList, sets)
+            _lastNRecords.value = result
+        }
+    }
+
     fun insertRoutineWithExercises(routine: Routine, exercises: List<Exercise>, sets: List<Int>) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertRoutineWithExercises(routine, exercises, sets)
         }
     }
 
-    fun insertRoutineRecordWithExercisesRecord(routineRecord: RoutineRecord, exercisesRecord: List<ExerciseRecord>){
+    fun insertRoutineRecordWithExercisesRecord(routineRecord: RoutineRecord, exercisesRecord: List<ExerciseRecord>) {
         viewModelScope.launch(Dispatchers.IO){
             repositoryRecord.addRoutineRecordWithExercises(routineRecord, exercisesRecord)
         }

@@ -37,6 +37,7 @@ import androidx.navigation.NavController
 import com.example.progo.data.entities.Routine
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.navigationScreens.Graph
+import com.example.progo.ui.navigationScreens.WorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 import com.example.progo.ui.viewmodel.HomeSharedViewModel
 
@@ -104,7 +105,7 @@ fun RoutinePreVisualization(
             ) {
                 Button(
                     onClick = {
-                        navController.navigate(Graph.WORKOUT)
+
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Green),
                     shape = RoundedCornerShape(15.dp)
