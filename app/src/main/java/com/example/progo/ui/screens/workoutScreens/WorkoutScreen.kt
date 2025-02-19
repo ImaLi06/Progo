@@ -34,9 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.progo.data.entities.ExerciseRoutine.RoutineWithExercise
 import com.example.progo.data.entities.Routine
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.navigationScreens.Graph
+import com.example.progo.ui.navigationScreens.OnWorkOutScreens
 import com.example.progo.ui.navigationScreens.WorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 import com.example.progo.ui.viewmodel.HomeSharedViewModel
@@ -45,7 +47,8 @@ import com.example.progo.ui.viewmodel.HomeSharedViewModel
 fun WorkoutScreen(
     navController: NavController,
     paddingValues: PaddingValues,
-    viewModel: ExerciseRoutineViewModel
+    viewModel: ExerciseRoutineViewModel,
+    homeSharedViewModel: HomeSharedViewModel
 ){
 
     val auxRoutineList by viewModel.allRoutines.collectAsState(initial = emptyList())
@@ -66,7 +69,8 @@ fun WorkoutScreen(
             RoutinePreVisualization(
                 item,
                 viewModel = viewModel,
-                navController = navController
+                navController = navController,
+                homeSharedViewModel = homeSharedViewModel
             )
         }
     }
@@ -77,6 +81,7 @@ fun RoutinePreVisualization(
     item: Routine,
     viewModel: ExerciseRoutineViewModel,
     navController: NavController,
+    homeSharedViewModel: HomeSharedViewModel,
 ){
     Button(
         onClick = {},
@@ -105,7 +110,9 @@ fun RoutinePreVisualization(
             ) {
                 Button(
                     onClick = {
-
+                        viewModel.getRoutineWithExercise(item.routineName)
+                        homeSharedViewModel.defineRoutineName(item.routineName)
+                        navController.navigate(OnWorkOutScreens.onWorkOutScreen.route)
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Green),
                     shape = RoundedCornerShape(15.dp)

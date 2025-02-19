@@ -1,21 +1,26 @@
 package com.example.progo.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.example.progo.data.entities.Exercise
+import com.example.progo.data.entities.ExerciseRoutine.RoutineWithExercise
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class HomeSharedViewModel(): ViewModel(){
-    private val _modeWorkout = MutableStateFlow("a")
-    val modeWorkout = _modeWorkout.asStateFlow()
-    private val _createdRoutineName = MutableStateFlow("")
-    val createdRoutineName = _createdRoutineName.asStateFlow()
+    private val _actualRoutineName = MutableStateFlow("")
+    val actualRoutineName = _actualRoutineName.asStateFlow()
 
-    fun establishMode(mode: String){
-        _modeWorkout.value = mode
-        println(_modeWorkout.value)
+    private val _sharedExerciseList = MutableStateFlow<List<Exercise>>(emptyList())
+    val sharedExerciseList = _sharedExerciseList.asStateFlow()
+
+    private val _sharedExerciseSetsList = MutableStateFlow<List<Int>>(emptyList())
+    val sharedExerciseSetsList = _sharedExerciseSetsList.asStateFlow()
+
+    fun defineRoutineName(name: String){
+        _actualRoutineName.value = name
     }
 
-    fun establishCreatedRoutineName(name: String){
-        _createdRoutineName.value = name
+    fun defineExerciseList(auxExerciseList: List<RoutineWithExercise>){
+        _sharedExerciseList.value = auxExerciseList[0].gymExercises
     }
 }

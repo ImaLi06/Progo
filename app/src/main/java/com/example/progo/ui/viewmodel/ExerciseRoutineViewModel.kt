@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ExerciseRoutineViewModel(application: Application):AndroidViewModel(application) {
@@ -29,6 +30,9 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
 
     private val _lastNRecords = MutableStateFlow<Pair<List<List<Int>>, List<List<Float>>>>(Pair(emptyList(), emptyList()))
     val lastNRecords: StateFlow<Pair<List<List<Int>>, List<List<Float>>>> = _lastNRecords
+
+    private val _actualRoutine = MutableStateFlow<List<RoutineWithExercise>>(emptyList())
+    val actualRoutine = _actualRoutine.asStateFlow()
 
     init {
         val exerciseRoutineDao = ProgoDataBase.getProgoDataBase(application).exerciseRoutineDao()
@@ -59,8 +63,11 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
         }
     }
 
-    fun getRoutineWithExercise(routineName: String): List<RoutineWithExercise> {
-        return repository.getRoutineWithExercise(routineName)
+    fun getRoutineWithExercise(routineName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = repository.getRoutineWithExercise(routineName)
+            _actualRoutine.value = result
+        }
     }
 
     fun getExerciseWithRoutine(exerciseName: String): List<ExerciseWithRoutine>{

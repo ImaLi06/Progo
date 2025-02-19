@@ -30,7 +30,7 @@ class ExerciseRoutineRepository(private val exerciseRoutineDao: ExerciseRoutineD
         exerciseRoutineDao.deleteRoutineWithCrossRef(routine)
     }
 
-    fun getRoutineWithExercise(routineName: String): List<RoutineWithExercise>{
+    suspend fun getRoutineWithExercise(routineName: String): List<RoutineWithExercise>{
         return exerciseRoutineDao.getRoutineWithExercise(routineName)
     }
     fun getExerciseWithRoutine(exerciseName: String): List<ExerciseWithRoutine>{

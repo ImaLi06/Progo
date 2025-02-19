@@ -48,7 +48,7 @@ interface ExerciseRoutineDao {
 
     @Transaction
     @Query("SELECT * FROM Routine WHERE routineName = :routineName")
-    fun getRoutineWithExercise(routineName: String): List<RoutineWithExercise>
+    suspend fun getRoutineWithExercise(routineName: String): List<RoutineWithExercise>
 
     @Transaction
     @Query("SELECT * FROM Exercise WHERE exerciseName = :exerciseName")

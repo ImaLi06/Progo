@@ -119,9 +119,6 @@ fun NewWorkoutContent(
                 repsValues = repsValues,
                 weightValues = weightValues,
                 exerciseListSize = exerciseList.size,
-                exerciseList = exerciseList,
-                sets = sets,
-                viewModel = viewModel,
                 repsList = repsSubList,
                 weightList = weightSubList
             )
@@ -162,10 +159,7 @@ fun Input(
     sharedViewModel: ExerciseRoutineSharedViewModel,
     repsValues: List<List<String>>,
     weightValues: List<List<String>>,
-    exerciseList: List<Exercise>,
-    sets: List<Int>,
     exerciseListSize: Int,
-    viewModel: ExerciseRoutineViewModel,
     repsList: List<Int>,
     weightList: List<Float>
 ){
@@ -203,10 +197,7 @@ fun Input(
                 SecondaryTextTemplate(item.exerciseName, 20)
                 InputAdditionalOptions(
                     index = index,
-                    sharedViewModel = sharedViewModel,
-                    viewModel = viewModel,
-                    exerciseList = exerciseList,
-                    sets = sets
+                    sharedViewModel = sharedViewModel
                 )
             }
             Row(
@@ -315,9 +306,6 @@ fun Reps(
 fun InputAdditionalOptions(
     index: Int,
     sharedViewModel: ExerciseRoutineSharedViewModel,
-    viewModel: ExerciseRoutineViewModel,
-    exerciseList: List<Exercise>,
-    sets: List<Int>
 ){
     var expanded by remember { mutableStateOf(false)}
     Box{
