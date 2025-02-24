@@ -40,15 +40,16 @@ import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.navigationScreens.Graph
 import com.example.progo.ui.navigationScreens.OnWorkOutScreens
 import com.example.progo.ui.navigationScreens.WorkoutScreen
+import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
-import com.example.progo.ui.viewmodel.HomeSharedViewModel
 
 @Composable
 fun WorkoutScreen(
     navController: NavController,
     paddingValues: PaddingValues,
     viewModel: ExerciseRoutineViewModel,
-    homeSharedViewModel: HomeSharedViewModel
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    routineState: Boolean
 ){
 
     val auxRoutineList by viewModel.allRoutines.collectAsState(initial = emptyList())
@@ -70,7 +71,8 @@ fun WorkoutScreen(
                 item,
                 viewModel = viewModel,
                 navController = navController,
-                homeSharedViewModel = homeSharedViewModel
+                sharedViewModel = sharedViewModel,
+                routineState = routineState
             )
         }
     }
@@ -81,7 +83,8 @@ fun RoutinePreVisualization(
     item: Routine,
     viewModel: ExerciseRoutineViewModel,
     navController: NavController,
-    homeSharedViewModel: HomeSharedViewModel,
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    routineState: Boolean
 ){
     Button(
         onClick = {},
@@ -110,9 +113,12 @@ fun RoutinePreVisualization(
             ) {
                 Button(
                     onClick = {
-                        viewModel.getRoutineWithExercise(item.routineName)
-                        homeSharedViewModel.defineRoutineName(item.routineName)
-                        navController.navigate(OnWorkOutScreens.onWorkOutScreen.route)
+                        if(!routineState){
+                            viewModel.getRoutineWithExercise(item.routineName)
+                            viewModel.getSetsExerciseRoutine(item.routineName)
+                            sharedViewModel.updateText(item.routineName)
+                            navController.navigate(OnWorkOutScreens.onWorkOutScreen.route)
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Green),
                     shape = RoundedCornerShape(15.dp)

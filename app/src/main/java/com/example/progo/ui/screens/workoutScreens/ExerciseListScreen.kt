@@ -31,6 +31,7 @@ fun ExerciseListScreen(
     navController: NavController,
     viewModel: ExerciseRoutineViewModel,
     sharedViewModel: ExerciseRoutineSharedViewModel,
+    navRoute: String
 ){
     Scaffold(
         topBar = { ProgoTopBar(navController) }
@@ -40,6 +41,7 @@ fun ExerciseListScreen(
             navController = navController,
             viewModel = viewModel,
             sharedViewModel = sharedViewModel,
+            navRoute = navRoute
         )
     }
 }
@@ -50,6 +52,7 @@ fun ExerciseListContent(
     navController: NavController,
     viewModel: ExerciseRoutineViewModel,
     sharedViewModel: ExerciseRoutineSharedViewModel,
+    navRoute: String
 ){
     val existentExerciseList by viewModel.allExercises.collectAsState(initial = emptyList())
 
@@ -70,7 +73,7 @@ fun ExerciseListContent(
         item {
             PrincipalButton(
                 text = "Agregar",
-                onClick = {navController.navigate(WorkoutScreen.newExercise.route)},
+                onClick = {navController.navigate(navRoute)},
                 height = 50,
                 width = 350
             )

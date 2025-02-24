@@ -52,6 +52,7 @@ fun NavGraphBuilder.workoutNavGraph(
                 navController = navController,
                 viewModel = viewModel,
                 sharedViewModel = sharedViewModel,
+                navRoute = WorkoutScreen.newExercise.route
             )
         }
         composable(route = WorkoutScreen.newExercise.route) { entry ->

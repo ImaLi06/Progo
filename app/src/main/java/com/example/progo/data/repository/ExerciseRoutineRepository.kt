@@ -37,7 +37,7 @@ class ExerciseRoutineRepository(private val exerciseRoutineDao: ExerciseRoutineD
         return exerciseRoutineDao.getExerciseWithRoutine(exerciseName)
     }
 
-    fun getSetsExerciseRoutine(routineName: String): List<Int>{
+    suspend fun getSetsExerciseRoutine(routineName: String): List<Int>{
         return exerciseRoutineDao.getSetsExerciseRoutine(routineName)
     }
 

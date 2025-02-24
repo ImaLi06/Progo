@@ -23,7 +23,7 @@ import com.example.progo.data.entities.Routine
         RoutineRecord::class,
         ExerciseRecord::class,
     ],
-    version = 3
+    version = 4
 )
 @TypeConverters(JsonConverters::class)
 abstract class ProgoDataBase: RoomDatabase() {

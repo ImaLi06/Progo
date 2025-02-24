@@ -2,6 +2,7 @@ package com.example.progo.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.progo.data.entities.Exercise
+import com.example.progo.data.entities.ExerciseRoutine.RoutineWithExercise
 import com.example.progo.ui.component.dragDropList.move
 import com.example.progo.ui.viewmodel.extra.Quadruple
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +24,9 @@ class ExerciseRoutineSharedViewModel(): ViewModel() {
 
     private val _sharedRoutineName = MutableStateFlow("")
     val sharedRoutineName = _sharedRoutineName.asStateFlow()
+
+    private val _routineStarted = MutableStateFlow(false)
+    val routineStarted = _routineStarted.asStateFlow()
 
     fun addExercise(exercise: Exercise){
         _sharedExerciseList.value += exercise
@@ -120,12 +124,15 @@ class ExerciseRoutineSharedViewModel(): ViewModel() {
                 Quadruple(exercise, sets, reps, weights)
             }
 
+        println(combinedList)
+
         val updatedCombinedList = combinedList.toMutableList()
         if (index1 in updatedCombinedList.indices && index2 in updatedCombinedList.indices) {
             updatedCombinedList[index1] = updatedCombinedList[index2].also {
                 updatedCombinedList[index2] = updatedCombinedList[index1]
             }
         }
+
 
         val updatedExerciseList = updatedCombinedList.map { it.first }
         val updatedSetsList = updatedCombinedList.map { it.second }
@@ -136,5 +143,25 @@ class ExerciseRoutineSharedViewModel(): ViewModel() {
         _sharedExerciseSetsList.value = updatedSetsList
         _sharedRepsValue.value = updatedRepsList
         _sharedWeightValue.value = updatedWeightList
+    }
+
+    fun defineExerciseList(auxExerciseList: List<Exercise>){
+        _sharedExerciseList.value = auxExerciseList
+    }
+
+    fun defineExerciseSetsList(sets: List<Int>){
+        _sharedExerciseSetsList.value = sets
+
+        _sharedRepsValue.value = sets.map { List(it) {""} }
+        _sharedWeightValue.value = sets.map { List(it) {""} }
+    }
+
+    fun changeRoutineState(state: Boolean){
+        _routineStarted.value = state
+    }
+
+    fun hasEmptySpace(): Boolean {
+        return _sharedRepsValue.value.any { list -> list.any { it.isBlank() } } ||
+                _sharedWeightValue.value.any { list -> list.any { it.isBlank() } }
     }
 }

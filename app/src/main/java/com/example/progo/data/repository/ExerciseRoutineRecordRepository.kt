@@ -18,8 +18,14 @@ class ExerciseRoutineRecordRepository(private val exerciseRoutineRecordDao: Exer
         exerciseRoutineRecordDao.deleteRoutineRecord(routineRecord)
     }
 
-    suspend fun addRoutineRecordWithExercises(routineRecord: RoutineRecord, exercisesRecord: List<ExerciseRecord>){
-        exerciseRoutineRecordDao.insertRoutineRecordWithExercises(routineRecord, exercisesRecord)
+    suspend fun addRoutineRecordWithExercises(
+        routineName: String,
+        exerciseList: List<Exercise>,
+        weightValues: List<List<String>>,
+        repsValues: List<List<String>>,
+        sets: List<Int>
+    ){
+        exerciseRoutineRecordDao.insertRoutineRecordWithExercises(routineName, exerciseList, weightValues, repsValues, sets)
     }
 
     suspend fun getLastNRecords(exerciseList: List<Exercise>, sets: List<Int>)

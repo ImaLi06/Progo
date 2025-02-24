@@ -1,35 +1,54 @@
 package com.example.progo.ui.screens.workoutScreens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.progo.data.entities.Exercise
+import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.ProgoTopBar
+import com.example.progo.ui.navigationScreens.OnWorkOutScreens
+import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
-import com.example.progo.ui.viewmodel.HomeSharedViewModel
 
 @Composable
 fun OnWorkOutScreen(
     navController: NavController,
     routineName: String,
     exerciseList: List<Exercise>,
-    homeSharedViewModel: HomeSharedViewModel,
-    viewModel: ExerciseRoutineViewModel
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    viewModel: ExerciseRoutineViewModel,
+    repsValues: List<List<String>>,
+    weightValues: List<List<String>>,
+    sets: List<Int>,
+    routineState: Boolean
 ){
-    val auxExerciseList by viewModel.actualRoutine.collectAsState()
-    homeSharedViewModel.defineExerciseList(auxExerciseList)
+    if(!routineState){
+        val auxExerciseList by viewModel.actualRoutine.collectAsState()
+        val auxExerciseSetsList by viewModel.exerciseList.collectAsState()
+        sharedViewModel.defineExerciseList(auxExerciseList)
+        sharedViewModel.defineExerciseSetsList(auxExerciseSetsList)
+        sharedViewModel.changeRoutineState(true)
+    }
+
     Scaffold(
         topBar = { ProgoTopBar(navController)}
     ) {
@@ -37,7 +56,12 @@ fun OnWorkOutScreen(
             paddingValues = it,
             routineName = routineName,
             exerciseList = exerciseList,
-            homeSharedViewModel = homeSharedViewModel
+            sharedViewModel = sharedViewModel,
+            sets = sets,
+            repsValues = repsValues,
+            weightValues = weightValues,
+            viewModel = viewModel,
+            navController = navController
         )
     }
 }
@@ -47,21 +71,83 @@ fun OnWorkOutScreenContent(
     paddingValues: PaddingValues,
     routineName: String,
     exerciseList: List<Exercise>,
-    homeSharedViewModel: HomeSharedViewModel
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    repsValues: List<List<String>>,
+    weightValues: List<List<String>>,
+    sets: List<Int>,
+    viewModel: ExerciseRoutineViewModel,
+    navController: NavController
 ){
+    val auxRepsWeightList by viewModel.lastNRecords.collectAsState()
+    viewModel.getLastNRecords(exerciseList, sets)
+    val repsList = auxRepsWeightList.first
+    val weightsList = auxRepsWeightList.second
+
     LazyColumn(
         modifier = Modifier
             .padding(paddingValues)
-            .fillMaxSize()
+            .fillMaxSize(),
+        contentPadding = PaddingValues(all = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         item { Text(routineName) }
-        items(exerciseList){exercise ->
-            Text(exercise.exerciseName)
+        itemsIndexed(exerciseList){index, item ->
+            val repsSubList = repsList.getOrNull(index) ?: emptyList()
+            val weightSubList = weightsList.getOrNull(index) ?: emptyList()
+            Input(
+                item = item,
+                index = index,
+                sharedViewModel = sharedViewModel,
+                repsValues = repsValues,
+                weightValues = weightValues,
+                repsList = repsSubList,
+                weightList = weightSubList,
+                exerciseListSize = exerciseList.size
+            )
+        }
+        item{
+            PrincipalButton(
+                text = "Agregar Ejercicio",
+                onClick = {navController.navigate(OnWorkOutScreens.onWorkOutExerciseList.route)},
+                height = 60,
+                width = 400
+            )
+        }
+        item{
+            PrincipalButton(
+                text = "Terminar Rutina",
+                onClick = {
+                    saveRoutine(
+                        navController = navController,
+                        sharedViewModel = sharedViewModel,
+                        viewModel = viewModel,
+                        routineName = routineName,
+                        exerciseList = exerciseList,
+                        repsValues = repsValues,
+                        weightValues = weightValues,
+                        sets = sets
+                    )
+                },
+                height = 60,
+                width = 400
+            )
         }
     }
 }
 
-@Composable
-fun InputOnWorkOut(exercise: Exercise){
-    Text(exercise.exerciseName)
+fun saveRoutine(
+    viewModel: ExerciseRoutineViewModel,
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    navController: NavController,
+    routineName: String,
+    exerciseList: List<Exercise>,
+    repsValues: List<List<String>>,
+    weightValues: List<List<String>>,
+    sets: List<Int>,
+){
+    if(!sharedViewModel.hasEmptySpace()){
+        sharedViewModel.changeRoutineState(false)
+        viewModel.insertRoutineRecordWithExercisesRecord(routineName, exerciseList, weightValues, repsValues, sets)
+        navController.popBackStack()
+    }
 }

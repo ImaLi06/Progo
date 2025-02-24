@@ -11,7 +11,7 @@ import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 fun ProgoRootNavigation(navController: NavHostController, viewModel: ExerciseRoutineViewModel) {
     NavHost(navController = navController,
         route = Graph.ROOT,
-        startDestination = Graph.LOGIN
+        startDestination = Graph.HOME
     ) {
         authNavGraph(navController = navController)
         composable(route = Graph.HOME){

@@ -31,8 +31,11 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
     private val _lastNRecords = MutableStateFlow<Pair<List<List<Int>>, List<List<Float>>>>(Pair(emptyList(), emptyList()))
     val lastNRecords: StateFlow<Pair<List<List<Int>>, List<List<Float>>>> = _lastNRecords
 
-    private val _actualRoutine = MutableStateFlow<List<RoutineWithExercise>>(emptyList())
+    private val _actualRoutine = MutableStateFlow<List<Exercise>>(emptyList())
     val actualRoutine = _actualRoutine.asStateFlow()
+
+    private val _exerciseSets = MutableStateFlow<List<Int>>(emptyList())
+    val exerciseList = _exerciseSets.asStateFlow()
 
     init {
         val exerciseRoutineDao = ProgoDataBase.getProgoDataBase(application).exerciseRoutineDao()
@@ -66,20 +69,19 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
     fun getRoutineWithExercise(routineName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getRoutineWithExercise(routineName)
-            _actualRoutine.value = result
+            _actualRoutine.value = result[0].gymExercises
         }
-    }
-
-    fun getExerciseWithRoutine(exerciseName: String): List<ExerciseWithRoutine>{
-        return repository.getExerciseWithRoutine(exerciseName)
     }
 
     fun getRoutineRecordWithExercise(routineRecordId: Int): List<RoutineRecordWithExercise>{
         return repositoryRecord.getRoutineRecordWithExercise(routineRecordId)
     }
 
-    fun getSetsExerciseRoutine(routineName: String): List<Int>{
-        return repository.getSetsExerciseRoutine(routineName)
+    fun getSetsExerciseRoutine(routineName: String){
+        viewModelScope.launch(Dispatchers.IO){
+            val result = repository.getSetsExerciseRoutine(routineName)
+            _exerciseSets.value = result
+        }
     }
 
     fun getLastNRecords(exerciseList: List<Exercise>, sets: List<Int>){
@@ -95,9 +97,15 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
         }
     }
 
-    fun insertRoutineRecordWithExercisesRecord(routineRecord: RoutineRecord, exercisesRecord: List<ExerciseRecord>) {
+    fun insertRoutineRecordWithExercisesRecord(
+        routineName: String,
+        exerciseList: List<Exercise>,
+        weightValues: List<List<String>>,
+        repsValues: List<List<String>>,
+        sets: List<Int>
+    ) {
         viewModelScope.launch(Dispatchers.IO){
-            repositoryRecord.addRoutineRecordWithExercises(routineRecord, exercisesRecord)
+            repositoryRecord.addRoutineRecordWithExercises(routineName, exerciseList, weightValues, repsValues, sets)
         }
     }
 

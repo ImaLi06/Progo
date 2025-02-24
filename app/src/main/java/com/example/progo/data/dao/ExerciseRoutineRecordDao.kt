@@ -11,6 +11,8 @@ import com.example.progo.data.entities.ExerciseRoutineRecord.RoutineRecordWithEx
 import com.example.progo.data.entities.RoutineRecord
 import com.example.progo.data.entities.ExerciseRecord
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Dao
 interface ExerciseRoutineRecordDao {
@@ -40,15 +42,58 @@ interface ExerciseRoutineRecordDao {
     )
     fun getLastNExerciseRecords(exerciseName: String, sets: Int): List<ExerciseRecord>
 
+    @Query("SELECT routineRecordId FROM RoutineRecord WHERE routineName = :name LIMIT 1")
+    suspend fun getRoutineIdByName(name: String): Long
+
     @Transaction
     suspend fun insertRoutineRecordWithExercises(
-        routineRecord: RoutineRecord,
-        exercisesRecord: List<ExerciseRecord>,
+        routineName: String,
+        exerciseList: List<Exercise>,
+        weightValues: List<List<String>>,
+        repsValues: List<List<String>>,
+        sets: List<Int>
     ){
-        upsertRoutineRecord(routineRecord)
-        exercisesRecord.forEach { exerciseRecord ->
-            upsertExerciseRecord(exerciseRecord.copy(routineRecordId = routineRecord.routineRecordId))
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val date = LocalDate.now().format(formatter)
+        val routineRecordAux = RoutineRecord(routineName = routineName, time = 0, date = date)
+        upsertRoutineRecord(routineRecordAux)
+
+        val floatWeightValues: List<List<Float>> = weightValues.map { list ->
+            list.map { it.toFloat() }
         }
+        val intRepsValues: List<List<Int>> = repsValues.map { list ->
+            list.map { it.toInt() }
+        }
+
+        val exercisesRecordAux: MutableList<ExerciseRecord> = mutableListOf()
+        val converter = JsonConverters()
+        for(i in exerciseList.indices){
+            val exerciseNameAux = exerciseList[i].exerciseName
+            val setsAux = sets[i]
+            val weightValuesAux = converter.fromFloatListToJson(floatWeightValues[i])
+            val repsValuesAux = converter.fromIntListToJson(intRepsValues[i])
+            var rmAux = 0.0f
+            for(j in floatWeightValues[i].indices){
+                val actRm: Float = floatWeightValues[i][j] / (1.0278f - (0.0278f * intRepsValues[i][j]))
+                rmAux = maxOf(rmAux, actRm)
+            }
+
+            val exerciseRecordAux = ExerciseRecord(
+                routineRecordId = getRoutineIdByName(routineName),
+                exerciseName = exerciseNameAux,
+                rm = rmAux,
+                date = date,
+                sets = setsAux,
+                reps = repsValuesAux,
+                weight = weightValuesAux
+            )
+            exercisesRecordAux.add(exerciseRecordAux)
+        }
+
+        for(i in exercisesRecordAux.indices){
+            upsertExerciseRecord(exercisesRecordAux[i])
+        }
+
     }
 
     @Transaction

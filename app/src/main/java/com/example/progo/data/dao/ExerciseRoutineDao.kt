@@ -56,7 +56,7 @@ interface ExerciseRoutineDao {
 
     @Transaction
     @Query("SELECT sets FROM ExerciseRoutineCrossRef WHERE routineName = :routineName")
-    fun getSetsExerciseRoutine(routineName: String): List<Int>
+    suspend fun getSetsExerciseRoutine(routineName: String): List<Int>
 
     @Transaction
     suspend fun insertRoutineWithExercises(routine: Routine, exercises: List<Exercise>, sets: List<Int>) {
