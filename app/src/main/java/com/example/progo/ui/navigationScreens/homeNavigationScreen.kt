@@ -44,7 +44,10 @@ fun HomeNavGraph(
             )
         }
         composable(route = navigationItems.Information.route) {
-            InformationScreen(paddingValues = paddingValues)
+            InformationScreen(
+                paddingValues = paddingValues,
+                viewModel = viewModel
+            )
         }
         composable(route = OnWorkOutScreens.onWorkOutScreen.route){ entry ->
             val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
@@ -54,6 +57,7 @@ fun HomeNavGraph(
             val repsValues by sharedViewModel.sharedRepsValue.collectAsStateWithLifecycle()
             val weightValues by sharedViewModel.sharedWeightValue.collectAsStateWithLifecycle()
             val routineState by sharedViewModel.routineStarted.collectAsStateWithLifecycle()
+            val workoutScreenType by sharedViewModel.workoutScreenType.collectAsStateWithLifecycle()
             OnWorkOutScreen(
                 navController = navController,
                 routineName = routineName,
@@ -63,7 +67,8 @@ fun HomeNavGraph(
                 sets = sets,
                 repsValues = repsValues,
                 weightValues = weightValues,
-                routineState = routineState
+                routineState = routineState,
+                workOutScreenType = workoutScreenType
             )
         }
 

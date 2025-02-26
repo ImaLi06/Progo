@@ -21,8 +21,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.progo.data.entities.Exercise
+import com.example.progo.data.entities.Routine
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.ProgoTopBar
 import com.example.progo.ui.navigationScreens.OnWorkOutScreens
@@ -39,7 +41,8 @@ fun OnWorkOutScreen(
     repsValues: List<List<String>>,
     weightValues: List<List<String>>,
     sets: List<Int>,
-    routineState: Boolean
+    routineState: Boolean,
+    workOutScreenType: String
 ){
     if(!routineState){
         val auxExerciseList by viewModel.actualRoutine.collectAsState()
@@ -61,7 +64,9 @@ fun OnWorkOutScreen(
             repsValues = repsValues,
             weightValues = weightValues,
             viewModel = viewModel,
-            navController = navController
+            navController = navController,
+            workOutScreenType = workOutScreenType
+
         )
     }
 }
@@ -76,7 +81,8 @@ fun OnWorkOutScreenContent(
     weightValues: List<List<String>>,
     sets: List<Int>,
     viewModel: ExerciseRoutineViewModel,
-    navController: NavController
+    navController: NavController,
+    workOutScreenType: String
 ){
     val auxRepsWeightList by viewModel.lastNRecords.collectAsState()
     viewModel.getLastNRecords(exerciseList, sets)
@@ -90,7 +96,7 @@ fun OnWorkOutScreenContent(
         contentPadding = PaddingValues(all = 20.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        item { Text(routineName) }
+        item { Text(text = routineName, fontSize = 15.sp) }
         itemsIndexed(exerciseList){index, item ->
             val repsSubList = repsList.getOrNull(index) ?: emptyList()
             val weightSubList = weightsList.getOrNull(index) ?: emptyList()
@@ -125,7 +131,8 @@ fun OnWorkOutScreenContent(
                         exerciseList = exerciseList,
                         repsValues = repsValues,
                         weightValues = weightValues,
-                        sets = sets
+                        sets = sets,
+                        workOutScreenType = workOutScreenType
                     )
                 },
                 height = 60,
@@ -144,10 +151,21 @@ fun saveRoutine(
     repsValues: List<List<String>>,
     weightValues: List<List<String>>,
     sets: List<Int>,
+    workOutScreenType: String
 ){
-    if(!sharedViewModel.hasEmptySpace()){
+    if(workOutScreenType == "edit"){
         sharedViewModel.changeRoutineState(false)
-        viewModel.insertRoutineRecordWithExercisesRecord(routineName, exerciseList, weightValues, repsValues, sets)
+        viewModel.insertRoutineWithExercises(
+            routine = Routine(routineName),
+            exercises = exerciseList,
+            sets = sets
+        )
         navController.popBackStack()
+    } else{
+        if(!sharedViewModel.hasEmptySpace()){
+            sharedViewModel.changeRoutineState(false)
+            viewModel.insertRoutineRecordWithExercisesRecord(routineName, exerciseList, weightValues, repsValues, sets)
+            navController.popBackStack()
+        }
     }
 }

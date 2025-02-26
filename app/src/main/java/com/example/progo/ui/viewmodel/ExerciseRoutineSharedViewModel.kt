@@ -28,6 +28,9 @@ class ExerciseRoutineSharedViewModel(): ViewModel() {
     private val _routineStarted = MutableStateFlow(false)
     val routineStarted = _routineStarted.asStateFlow()
 
+    private val _workoutScreenType = MutableStateFlow("")
+    val workoutScreenType = _workoutScreenType.asStateFlow()
+
     fun addExercise(exercise: Exercise){
         _sharedExerciseList.value += exercise
         _sharedExerciseSetsList.value += 1
@@ -163,5 +166,9 @@ class ExerciseRoutineSharedViewModel(): ViewModel() {
     fun hasEmptySpace(): Boolean {
         return _sharedRepsValue.value.any { list -> list.any { it.isBlank() } } ||
                 _sharedWeightValue.value.any { list -> list.any { it.isBlank() } }
+    }
+
+    fun changeWorkoutScreenType(type: String){
+        _workoutScreenType.value = type
     }
 }

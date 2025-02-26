@@ -105,7 +105,13 @@ fun RoutinePreVisualization(
                     text = item.routineName,
                     color = MaterialTheme.colorScheme.onSecondary
                 )
-                WorkOutAdditionalOptions(viewModel = viewModel, item = item, navController = navController)
+                WorkOutAdditionalOptions(
+                    viewModel = viewModel,
+                    item = item,
+                    navController = navController,
+                    sharedViewModel = sharedViewModel,
+                    routineState = routineState
+                )
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -117,6 +123,7 @@ fun RoutinePreVisualization(
                             viewModel.getRoutineWithExercise(item.routineName)
                             viewModel.getSetsExerciseRoutine(item.routineName)
                             sharedViewModel.updateText(item.routineName)
+                            sharedViewModel.changeWorkoutScreenType("workout")
                             navController.navigate(OnWorkOutScreens.onWorkOutScreen.route)
                         }
                     },
@@ -143,7 +150,13 @@ fun CreateNewRoutineButton(navController: NavController){
 }
 
 @Composable
-fun WorkOutAdditionalOptions(viewModel: ExerciseRoutineViewModel, item: Routine, navController: NavController){
+fun WorkOutAdditionalOptions(
+    viewModel: ExerciseRoutineViewModel,
+    item: Routine,
+    navController: NavController,
+    routineState: Boolean,
+    sharedViewModel: ExerciseRoutineSharedViewModel
+){
     var expanded by remember { mutableStateOf(false) }
 
     Box {
@@ -154,7 +167,15 @@ fun WorkOutAdditionalOptions(viewModel: ExerciseRoutineViewModel, item: Routine,
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(onClick = { viewModel.deleteRoutineWithCrossRef(item)}, text = {Text("Eliminar")})
             DropdownMenuItem(
-                onClick = {},
+                onClick = {
+                    if(!routineState){
+                        viewModel.getRoutineWithExercise(item.routineName)
+                        viewModel.getSetsExerciseRoutine(item.routineName)
+                        sharedViewModel.updateText(item.routineName)
+                        sharedViewModel.changeWorkoutScreenType("edit")
+                        navController.navigate(OnWorkOutScreens.onWorkOutScreen.route)
+                    }
+                },
                 text = { Text("Editar")}
             )
         }
