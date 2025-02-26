@@ -22,26 +22,38 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.progo.data.entities.RoutineRecord
 import com.example.progo.ui.component.SecondaryTextTemplate
+import com.example.progo.ui.navigationScreens.OnWorkOutScreens
+import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 
 @Composable
 fun InformationScreen(
     paddingValues: PaddingValues,
-    viewModel: ExerciseRoutineViewModel
+    viewModel: ExerciseRoutineViewModel,
+    navController: NavController,
+    sharedViewModel: ExerciseRoutineSharedViewModel
 ){
     val routineRecordList by viewModel.allRoutinesRecord.collectAsState(initial = emptyList())
     InformationScreenContent(
         paddingValues = paddingValues,
-        routineRecordList = routineRecordList
+        routineRecordList = routineRecordList,
+        navController = navController,
+        viewModel = viewModel,
+        sharedViewModel = sharedViewModel
     )
 }
 
 @Composable
 fun InformationScreenContent(
     paddingValues: PaddingValues,
-    routineRecordList: List<RoutineRecord>
+    routineRecordList: List<RoutineRecord>,
+    navController: NavController,
+    viewModel: ExerciseRoutineViewModel,
+    sharedViewModel: ExerciseRoutineSharedViewModel
 ){
     LazyColumn(
         modifier = Modifier
@@ -52,15 +64,29 @@ fun InformationScreenContent(
         contentPadding = PaddingValues(10.dp)
     ) {
         items(routineRecordList){item ->
-            RoutineRecordPreVisualization(item)
+            RoutineRecordPreVisualization(
+                item,
+                navController = navController,
+                viewModel = viewModel,
+                sharedViewModel = sharedViewModel
+            )
         }
     }
 }
 
 @Composable
-fun RoutineRecordPreVisualization(item: RoutineRecord){
+fun RoutineRecordPreVisualization(
+    item: RoutineRecord,
+    navController: NavController,
+    viewModel: ExerciseRoutineViewModel,
+    sharedViewModel: ExerciseRoutineSharedViewModel
+){
     Button(
-        onClick = {},
+        onClick = {
+            sharedViewModel.updateText(item.routineName)
+            viewModel.getRoutineRecordWithExercise(item.routineRecordId)
+            navController.navigate(OnWorkOutScreens.pastWorkOutScreen.route)
+        },
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.secondary
         ),

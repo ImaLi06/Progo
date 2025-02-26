@@ -30,19 +30,19 @@ interface ExerciseRoutineRecordDao {
     fun readAllDataRoutineRecord(): Flow<List<RoutineRecord>>
 
     @Transaction
-    @Query("SELECT * FROM RoutineRecord WHERE routineRecordId= :routineRecordId")
-    fun getRoutineRecordWithExercise(routineRecordId: Int): List<RoutineRecordWithExercise>
+    @Query("SELECT * FROM ExerciseRecord WHERE routineRecordId= :routineRecordId")
+    suspend fun getRoutineRecordWithExercise(routineRecordId: Long?): List<ExerciseRecord>
 
     @Transaction
     @Query(
         "SELECT * FROM ExerciseRecord " +
                 "WHERE exerciseName = :exerciseName " +
-                "ORDER BY exerciseRecordId ASC " +
+                "ORDER BY exerciseRecordId DESC " +
                 "LIMIT :sets"
     )
     fun getLastNExerciseRecords(exerciseName: String, sets: Int): List<ExerciseRecord>
 
-    @Query("SELECT routineRecordId FROM RoutineRecord WHERE routineName = :name LIMIT 1")
+    @Query("SELECT routineRecordId FROM RoutineRecord WHERE routineName = :name ORDER BY routineRecordId DESC LIMIT 1")
     suspend fun getRoutineIdByName(name: String): Long
 
     @Transaction
@@ -78,8 +78,11 @@ interface ExerciseRoutineRecordDao {
                 rmAux = maxOf(rmAux, actRm)
             }
 
+            val id = getRoutineIdByName(routineName)
+            println(id)
+
             val exerciseRecordAux = ExerciseRecord(
-                routineRecordId = getRoutineIdByName(routineName),
+                routineRecordId = id,
                 exerciseName = exerciseNameAux,
                 rm = rmAux,
                 date = date,

@@ -2,7 +2,6 @@ package com.example.progo.ui.navigationScreens
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -16,6 +15,7 @@ import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 import androidx.compose.runtime.getValue
 import com.example.progo.ui.screens.workoutScreens.ExerciseListScreen
 import com.example.progo.ui.screens.workoutScreens.NewExerciseScreen
+import com.example.progo.ui.screens.informationScreens.PastWorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 
 @Composable
@@ -43,10 +43,13 @@ fun HomeNavGraph(
                 routineState = routineState
             )
         }
-        composable(route = navigationItems.Information.route) {
+        composable(route = navigationItems.Information.route) { entry ->
+            val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
             InformationScreen(
                 paddingValues = paddingValues,
-                viewModel = viewModel
+                viewModel = viewModel,
+                navController = navController,
+                sharedViewModel = sharedViewModel
             )
         }
         composable(route = OnWorkOutScreens.onWorkOutScreen.route){ entry ->
@@ -89,6 +92,16 @@ fun HomeNavGraph(
             )
         }
 
+        composable(route = OnWorkOutScreens.pastWorkOutScreen.route){entry ->
+            val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
+            val routineName by sharedViewModel.sharedRoutineName.collectAsStateWithLifecycle()
+            PastWorkoutScreen(
+                navController = navController,
+                viewModel = viewModel,
+                routineName = routineName
+            )
+        }
+
         workoutNavGraph(navController = navController, viewModel = viewModel)
     }
 }
@@ -97,4 +110,5 @@ sealed class OnWorkOutScreens(val route: String){
     object onWorkOutScreen: OnWorkOutScreens(route = "on_workout")
     object onWorkOutExerciseList: OnWorkOutScreens(route = "on_workout_exercise_list")
     object onWorkOutCreateExercise: OnWorkOutScreens(route = "on_workout_create_exercise")
+    object pastWorkOutScreen: OnWorkOutScreens(route = "pastWorkOutScreen")
 }
