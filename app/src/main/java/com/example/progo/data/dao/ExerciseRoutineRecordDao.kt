@@ -34,6 +34,10 @@ interface ExerciseRoutineRecordDao {
     suspend fun getRoutineRecordWithExercise(routineRecordId: Long?): List<ExerciseRecord>
 
     @Transaction
+    @Query("SELECT * FROM ExerciseRecord WHERE exerciseName= :exerciseName ORDER BY exerciseRecordId DESC")
+    suspend fun getExerciseRecords(exerciseName: String): List<ExerciseRecord>
+
+    @Transaction
     @Query(
         "SELECT * FROM ExerciseRecord " +
                 "WHERE exerciseName = :exerciseName " +

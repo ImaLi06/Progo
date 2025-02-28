@@ -96,7 +96,7 @@ fun OnWorkOutScreenContent(
         contentPadding = PaddingValues(all = 20.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        item { Text(text = routineName, fontSize = 15.sp) }
+        item { Text(text = routineName, fontSize = 30.sp) }
         itemsIndexed(exerciseList){index, item ->
             val repsSubList = repsList.getOrNull(index) ?: emptyList()
             val weightSubList = weightsList.getOrNull(index) ?: emptyList()
@@ -108,7 +108,9 @@ fun OnWorkOutScreenContent(
                 weightValues = weightValues,
                 repsList = repsSubList,
                 weightList = weightSubList,
-                exerciseListSize = exerciseList.size
+                exerciseListSize = exerciseList.size,
+                navController = navController,
+                screenType = workOutScreenType
             )
         }
         item{

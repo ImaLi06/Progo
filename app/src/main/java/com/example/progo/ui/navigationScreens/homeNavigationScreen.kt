@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import com.example.progo.ui.screens.workoutScreens.ExerciseListScreen
 import com.example.progo.ui.screens.workoutScreens.NewExerciseScreen
 import com.example.progo.ui.screens.informationScreens.PastWorkoutScreen
+import com.example.progo.ui.screens.workoutScreens.ExerciseStatsScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 
 @Composable
@@ -98,7 +99,18 @@ fun HomeNavGraph(
             PastWorkoutScreen(
                 navController = navController,
                 viewModel = viewModel,
-                routineName = routineName
+                routineName = routineName,
+                sharedViewModel = sharedViewModel
+            )
+        }
+
+        composable(route = OnWorkOutScreens.onWorkOutExerciseRecords.route){entry ->
+            val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
+            val exerciseName by sharedViewModel.sharedRoutineName.collectAsStateWithLifecycle()
+            ExerciseStatsScreen(
+                navController = navController,
+                exerciseName = exerciseName,
+                viewModel = viewModel
             )
         }
 
@@ -110,5 +122,6 @@ sealed class OnWorkOutScreens(val route: String){
     object onWorkOutScreen: OnWorkOutScreens(route = "on_workout")
     object onWorkOutExerciseList: OnWorkOutScreens(route = "on_workout_exercise_list")
     object onWorkOutCreateExercise: OnWorkOutScreens(route = "on_workout_create_exercise")
-    object pastWorkOutScreen: OnWorkOutScreens(route = "pastWorkOutScreen")
+    object pastWorkOutScreen: OnWorkOutScreens(route = "past_workout_screen")
+    object onWorkOutExerciseRecords: OnWorkOutScreens(route = "on_workout_exercise_records")
 }

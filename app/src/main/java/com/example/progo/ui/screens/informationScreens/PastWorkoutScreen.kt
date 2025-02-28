@@ -1,6 +1,7 @@
 package com.example.progo.ui.screens.informationScreens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -30,6 +32,9 @@ import com.example.progo.data.JsonConverters
 import com.example.progo.data.entities.ExerciseRecord
 import com.example.progo.ui.component.ProgoTopBar
 import com.example.progo.ui.component.SecondaryTextTemplate
+import com.example.progo.ui.navigationScreens.OnWorkOutScreens
+import com.example.progo.ui.navigationScreens.WorkoutScreen
+import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 import com.google.common.base.Converter
 
@@ -38,6 +43,7 @@ fun PastWorkoutScreen(
     navController: NavController,
     viewModel: ExerciseRoutineViewModel,
     routineName: String,
+    sharedViewModel: ExerciseRoutineSharedViewModel
 ){
     val pastRoutineExercises by viewModel.pastRoutine.collectAsState()
     Scaffold(
@@ -46,7 +52,9 @@ fun PastWorkoutScreen(
         PastWorkoutScreenContent(
             paddingValues = it,
             routineName = routineName,
-            pastRoutineExercises = pastRoutineExercises
+            pastRoutineExercises = pastRoutineExercises,
+            sharedViewModel = sharedViewModel,
+            navController = navController
         )
     }
 }
@@ -55,7 +63,9 @@ fun PastWorkoutScreen(
 fun PastWorkoutScreenContent(
     paddingValues: PaddingValues,
     routineName: String,
-    pastRoutineExercises: List<ExerciseRecord>
+    pastRoutineExercises: List<ExerciseRecord>,
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    navController: NavController
 ){
     LazyColumn(
         modifier = Modifier
@@ -65,16 +75,23 @@ fun PastWorkoutScreenContent(
         contentPadding = PaddingValues(10.dp),
     ) {
         item {
-            Text(routineName, fontSize = 30.sp)
+            Text(
+                routineName,
+                fontSize = 30.sp
+            )
         }
         items(pastRoutineExercises){ item ->
-            Record(item = item)
+            Record(
+                item = item,
+                navController = navController,
+                sharedViewModel = sharedViewModel
+            )
         }
     }
 }
 
 @Composable
-fun Record(item: ExerciseRecord){
+fun Record(item: ExerciseRecord, navController: NavController, sharedViewModel: ExerciseRoutineSharedViewModel){
     Column(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(15.dp))
@@ -84,7 +101,12 @@ fun Record(item: ExerciseRecord){
         Spacer(Modifier.size(10.dp))
         Row {
             Spacer(Modifier.size(15.dp))
-            SecondaryTextTemplate(secondaryText = item.exerciseName, fontSize = 25)
+            PastExerciseNameText(
+                navController = navController,
+                exerciseName = item.exerciseName,
+                fontSize = 20,
+                sharedViewModel = sharedViewModel
+            )
         }
         Spacer(Modifier.size(20.dp))
         Row() {
@@ -138,4 +160,22 @@ fun PastWeight(item: ExerciseRecord){
             Text("${weightList[i]}", fontSize = 20.sp)
         }
     }
+}
+
+@Composable
+fun PastExerciseNameText(
+    navController: NavController,
+    exerciseName: String,
+    fontSize: Int,
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+){
+    Text(
+        text = exerciseName,
+        modifier = Modifier.clickable {
+            sharedViewModel.updateText(exerciseName)
+            navController.navigate(OnWorkOutScreens.onWorkOutExerciseRecords.route)
+        },
+        color = Color.Green,
+        fontSize = fontSize.sp
+    )
 }

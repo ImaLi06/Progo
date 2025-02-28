@@ -33,6 +33,7 @@ fun NavGraphBuilder.workoutNavGraph(
             val sets by sharedViewModel.sharedExerciseSetsList.collectAsStateWithLifecycle()
             val repsValues by sharedViewModel.sharedRepsValue.collectAsStateWithLifecycle()
             val weightValues by sharedViewModel.sharedWeightValue.collectAsStateWithLifecycle()
+            val screenType by sharedViewModel.workoutScreenType.collectAsStateWithLifecycle()
 
             NewWorkoutScreen(
                 navController = navController,
@@ -42,7 +43,8 @@ fun NavGraphBuilder.workoutNavGraph(
                 routineName = name,
                 repsValues = repsValues,
                 weightValues = weightValues,
-                sets = sets
+                sets = sets,
+                screenType = screenType
             )
         }
         composable(route = WorkoutScreen.exerciseList.route) { entry ->
@@ -62,8 +64,14 @@ fun NavGraphBuilder.workoutNavGraph(
             NewExerciseScreen(navController = navController, viewModel = viewModel)
         }
 
-        composable(route = WorkoutScreen.exerciseStats.route){
-            ExerciseStatsScreen()
+        composable(route = WorkoutScreen.exerciseStats.route){entry ->
+            val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
+            val name by sharedViewModel.sharedRoutineName.collectAsStateWithLifecycle()
+            ExerciseStatsScreen(
+                navController = navController,
+                exerciseName = name,
+                viewModel = viewModel
+            )
         }
     }
 }

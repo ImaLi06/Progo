@@ -1,6 +1,7 @@
 package com.example.progo.ui.screens.workoutScreens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,7 +37,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.progo.data.entities.Exercise
@@ -46,6 +49,7 @@ import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.SecondaryTextLabel
 import com.example.progo.ui.component.SecondaryTextTemplate
 import com.example.progo.ui.component.ProgoTopBar
+import com.example.progo.ui.navigationScreens.OnWorkOutScreens
 import com.example.progo.ui.navigationScreens.WorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
@@ -59,7 +63,8 @@ fun NewWorkoutScreen(
     routineName: String,
     repsValues: List<List<String>>,
     weightValues: List<List<String>>,
-    sets: List<Int>
+    sets: List<Int>,
+    screenType: String
 ){
     Scaffold(
         topBar = { ProgoTopBar(navController)}
@@ -73,7 +78,8 @@ fun NewWorkoutScreen(
             sharedViewModel = sharedViewModel,
             repsValues = repsValues,
             weightValues = weightValues,
-            sets = sets
+            sets = sets,
+            screenType = screenType
         )
     }
 }
@@ -89,11 +95,13 @@ fun NewWorkoutContent(
     repsValues: List<List<String>>,
     weightValues: List<List<String>>,
     sets: List<Int>,
+    screenType: String
 ){
     val auxRepsWeightList by viewModel.lastNRecords.collectAsState()
     viewModel.getLastNRecords(exerciseList, sets)
     val repsList = auxRepsWeightList.first
     val weightsList = auxRepsWeightList.second
+    sharedViewModel.changeWorkoutScreenType("create")
 
     LazyColumn(
         modifier = Modifier
@@ -120,7 +128,9 @@ fun NewWorkoutContent(
                 weightValues = weightValues,
                 exerciseListSize = exerciseList.size,
                 repsList = repsSubList,
-                weightList = weightSubList
+                weightList = weightSubList,
+                navController = navController,
+                screenType = screenType
             )
         }
         item {
@@ -161,7 +171,9 @@ fun Input(
     weightValues: List<List<String>>,
     exerciseListSize: Int,
     repsList: List<Int>,
-    weightList: List<Float>
+    weightList: List<Float>,
+    navController: NavController,
+    screenType: String
 ){
     Row(
         modifier = Modifier
@@ -194,7 +206,14 @@ fun Input(
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
                 //Spacer(modifier = Modifier.size(25.dp, 10.dp))
-                SecondaryTextTemplate(item.exerciseName, 20)
+                ExerciseNameText(
+                    navController = navController,
+                    exerciseName = item.exerciseName,
+                    fontSize = 20,
+                    sharedViewModel = sharedViewModel,
+                    screenType = screenType,
+                    viewModel = viewModel()
+                )
                 InputAdditionalOptions(
                     index = index,
                     sharedViewModel = sharedViewModel
@@ -354,5 +373,30 @@ fun AddExerciseButton(
         onClick = onClick,
         height = height,
         width = width
+    )
+}
+
+@Composable
+fun ExerciseNameText(
+    navController: NavController,
+    exerciseName: String,
+    fontSize: Int,
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    viewModel: ExerciseRoutineViewModel,
+    screenType: String
+){
+    Text(
+        text = exerciseName,
+        modifier = Modifier.clickable {
+            sharedViewModel.updateText(exerciseName)
+            if(screenType == "create"){
+                navController.navigate(WorkoutScreen.exerciseStats.route)
+            }
+            else{
+                navController.navigate(OnWorkOutScreens.onWorkOutExerciseRecords.route)
+            }
+        },
+        color = Color.Green,
+        fontSize = fontSize.sp
     )
 }

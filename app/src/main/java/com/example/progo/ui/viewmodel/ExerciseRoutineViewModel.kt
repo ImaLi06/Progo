@@ -40,6 +40,9 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
     private val _pastRoutine = MutableStateFlow<List<ExerciseRecord>>(emptyList())
     val pastRoutine = _pastRoutine.asStateFlow()
 
+    private val _exerciseRecords = MutableStateFlow<List<ExerciseRecord>>(emptyList())
+    val exerciseRecords = _exerciseRecords.asStateFlow()
+
     init {
         val exerciseRoutineDao = ProgoDataBase.getProgoDataBase(application).exerciseRoutineDao()
         val exerciseRoutineRecordDao = ProgoDataBase.getProgoDataBase(application).exerciseRoutineRecordDao()
@@ -79,7 +82,6 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
     fun getRoutineRecordWithExercise(routineRecordId: Long?){
         viewModelScope.launch(Dispatchers.IO) {
             val result = repositoryRecord.getRoutineRecordWithExercise(routineRecordId)
-            println(result)
             _pastRoutine.value = result
         }
     }
@@ -95,6 +97,13 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
         viewModelScope.launch(Dispatchers.IO){
             val result = repositoryRecord.getLastNRecords(exerciseList, sets)
             _lastNRecords.value = result
+        }
+    }
+
+    fun getExerciseRecords(exerciseName: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = repositoryRecord.getExerciseRecords(exerciseName)
+            _exerciseRecords.value = result
         }
     }
 

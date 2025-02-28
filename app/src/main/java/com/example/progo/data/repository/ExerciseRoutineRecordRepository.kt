@@ -33,6 +33,10 @@ class ExerciseRoutineRecordRepository(private val exerciseRoutineRecordDao: Exer
         return exerciseRoutineRecordDao.getLastNRecords(exerciseList, sets)
     }
 
+    suspend fun getExerciseRecords(exerciseName: String): List<ExerciseRecord>{
+        return exerciseRoutineRecordDao.getExerciseRecords(exerciseName)
+    }
+
     suspend fun getRoutineRecordWithExercise(routineRecordId: Long?): List<ExerciseRecord>{
         return exerciseRoutineRecordDao.getRoutineRecordWithExercise(routineRecordId)
     }
