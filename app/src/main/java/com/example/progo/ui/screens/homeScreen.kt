@@ -29,7 +29,7 @@ import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 @Composable
 fun HomeScreen(navController: NavHostController = rememberNavController(), viewModel: ExerciseRoutineViewModel){
     Scaffold (
-        topBar = { topBar(navController)},
+        topBar = { TopBar(navController)},
         bottomBar = { bottomBar(navController = navController) }
     ){
         HomeNavGraph(navController = navController, paddingValues = it, viewModel = viewModel)
@@ -38,7 +38,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController(), viewM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun topBar(navController: NavHostController){
+fun TopBar(navController: NavHostController){
     val navigationItemsList = listOf(
         navigationItems.Information,
         navigationItems.Workout,

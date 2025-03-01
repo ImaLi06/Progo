@@ -46,11 +46,15 @@ fun HomeNavGraph(
         }
         composable(route = navigationItems.Information.route) { entry ->
             val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
+            val routineName by sharedViewModel.sharedRoutineName.collectAsStateWithLifecycle()
+            val routineState by sharedViewModel.routineStarted.collectAsStateWithLifecycle()
             InformationScreen(
                 paddingValues = paddingValues,
                 viewModel = viewModel,
                 navController = navController,
-                sharedViewModel = sharedViewModel
+                sharedViewModel = sharedViewModel,
+                routineName = routineName,
+                routineState = routineState
             )
         }
         composable(route = OnWorkOutScreens.onWorkOutScreen.route){ entry ->

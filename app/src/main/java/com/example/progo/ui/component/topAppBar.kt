@@ -24,7 +24,7 @@ fun ProgoTopBar(navController: NavController){
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "GoBack",
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.onSecondary
                 )
             }
         }

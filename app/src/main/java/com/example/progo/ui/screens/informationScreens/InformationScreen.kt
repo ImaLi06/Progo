@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.progo.data.entities.RoutineRecord
+import com.example.progo.ui.component.BottomBarActualRoutine
 import com.example.progo.ui.component.SecondaryTextTemplate
 import com.example.progo.ui.navigationScreens.OnWorkOutScreens
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
@@ -35,16 +37,27 @@ fun InformationScreen(
     paddingValues: PaddingValues,
     viewModel: ExerciseRoutineViewModel,
     navController: NavController,
-    sharedViewModel: ExerciseRoutineSharedViewModel
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    routineName: String,
+    routineState: Boolean
 ){
     val routineRecordList by viewModel.allRoutinesRecord.collectAsState(initial = emptyList())
-    InformationScreenContent(
-        paddingValues = paddingValues,
-        routineRecordList = routineRecordList,
-        navController = navController,
-        viewModel = viewModel,
-        sharedViewModel = sharedViewModel
-    )
+    Scaffold(
+        bottomBar = {
+            if(routineState){
+                BottomBarActualRoutine(routineName, navController, sharedViewModel)
+            }
+        },
+        modifier = Modifier.padding(paddingValues)
+    ) {
+        InformationScreenContent(
+            paddingValues = it,
+            routineRecordList = routineRecordList,
+            navController = navController,
+            viewModel = viewModel,
+            sharedViewModel = sharedViewModel
+        )
+    }
 }
 
 @Composable
@@ -57,7 +70,6 @@ fun InformationScreenContent(
 ){
     LazyColumn(
         modifier = Modifier
-            .padding(paddingValues)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(5.dp),

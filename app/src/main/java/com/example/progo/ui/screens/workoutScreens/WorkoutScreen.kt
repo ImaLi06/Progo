@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.progo.data.entities.ExerciseRoutine.RoutineWithExercise
 import com.example.progo.data.entities.Routine
@@ -103,7 +104,8 @@ fun RoutinePreVisualization(
             ){
                 Text(
                     text = item.routineName,
-                    color = MaterialTheme.colorScheme.onSecondary
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontSize = 20.sp
                 )
                 WorkOutAdditionalOptions(
                     viewModel = viewModel,
