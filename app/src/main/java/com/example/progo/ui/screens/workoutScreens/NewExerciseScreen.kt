@@ -20,19 +20,34 @@ import com.example.progo.data.entities.Exercise
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.PrincipalTextLabel
 import com.example.progo.ui.component.ProgoTopBar
+import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 
 @Composable
-fun NewExerciseScreen(navController: NavController, viewModel: ExerciseRoutineViewModel){
+fun NewExerciseScreen(
+    navController: NavController,
+    viewModel: ExerciseRoutineViewModel,
+    sharedViewModel: ExerciseRoutineSharedViewModel
+){
     Scaffold(
-        topBar = {ProgoTopBar(navController = navController)}
+        topBar = {ProgoTopBar(navController = navController, sharedViewModel = sharedViewModel)}
     ) {
-        NewExerciseContent(paddingValues = it, viewModel = viewModel, navController = navController)
+        NewExerciseContent(
+            paddingValues = it,
+            viewModel = viewModel,
+            navController = navController,
+            sharedViewModel = sharedViewModel
+        )
     }
 }
 
 @Composable
-fun NewExerciseContent(paddingValues: PaddingValues, viewModel: ExerciseRoutineViewModel, navController: NavController){
+fun NewExerciseContent(
+    paddingValues: PaddingValues,
+    viewModel: ExerciseRoutineViewModel,
+    navController: NavController,
+    sharedViewModel: ExerciseRoutineSharedViewModel
+){
     var exerciseNameAux by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
@@ -53,6 +68,7 @@ fun NewExerciseContent(paddingValues: PaddingValues, viewModel: ExerciseRoutineV
             onClick = {
                 val trimExerciseName = exerciseNameAux.trim()
                 if(trimExerciseName.isNotEmpty()){
+                    sharedViewModel.deleteLastTitle()
                     viewModel.addExercise(Exercise(exerciseName = exerciseNameAux))
                     exerciseNameAux = ""
                     navController.popBackStack()

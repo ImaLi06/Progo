@@ -61,7 +61,11 @@ fun NavGraphBuilder.workoutNavGraph(
             val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
             val state by sharedViewModel.sharedExerciseList.collectAsStateWithLifecycle()
 
-            NewExerciseScreen(navController = navController, viewModel = viewModel)
+            NewExerciseScreen(
+                navController = navController,
+                viewModel = viewModel,
+                sharedViewModel = sharedViewModel
+            )
         }
 
         composable(route = WorkoutScreen.exerciseStats.route){entry ->
@@ -70,7 +74,8 @@ fun NavGraphBuilder.workoutNavGraph(
             ExerciseStatsScreen(
                 navController = navController,
                 exerciseName = name,
-                viewModel = viewModel
+                viewModel = viewModel,
+                sharedViewModel = sharedViewModel
             )
         }
     }

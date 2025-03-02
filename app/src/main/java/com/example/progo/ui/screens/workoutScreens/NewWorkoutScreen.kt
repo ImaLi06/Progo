@@ -67,7 +67,7 @@ fun NewWorkoutScreen(
     screenType: String
 ){
     Scaffold(
-        topBar = { ProgoTopBar(navController)}
+        topBar = { ProgoTopBar(navController, sharedViewModel)}
     ) {
         NewWorkoutContent(
             paddingValues = it,
@@ -136,7 +136,10 @@ fun NewWorkoutContent(
         item {
             AddExerciseButton(
                 text = "Agregar Ejercicio",
-                onClick = {navController.navigate(WorkoutScreen.exerciseList.route)},
+                onClick = {
+                    navController.navigate(WorkoutScreen.exerciseList.route)
+                    sharedViewModel.addTitle("create_exercise")
+                },
                 height = 60,
                 width = 400
             )
@@ -147,6 +150,7 @@ fun NewWorkoutContent(
                 onClick = {
                     val trimRoutineName = routineName.trim()
                     if(trimRoutineName.isNotEmpty()){
+                        sharedViewModel.deleteLastTitle()
                         viewModel.insertRoutineWithExercises(
                             routine = Routine(routineName = routineName),
                             exercises = exerciseList,
@@ -388,7 +392,7 @@ fun ExerciseNameText(
     Text(
         text = exerciseName,
         modifier = Modifier.clickable {
-            sharedViewModel.updateText(exerciseName)
+            sharedViewModel.addTitle(exerciseName)
             if(screenType == "create"){
                 navController.navigate(WorkoutScreen.exerciseStats.route)
             }

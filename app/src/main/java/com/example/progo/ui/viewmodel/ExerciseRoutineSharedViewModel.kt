@@ -22,11 +22,18 @@ class ExerciseRoutineSharedViewModel(): ViewModel() {
     private val _sharedWeightValue = MutableStateFlow<List<List<String>>>(emptyList())
     val sharedWeightValue = _sharedWeightValue.asStateFlow()
 
+    private val _navigationTitles: MutableList<String> = mutableListOf()
+    val lastTitle: String
+        get() = _navigationTitles.lastOrNull() ?: "rutina"
+
     private val _sharedRoutineName = MutableStateFlow("")
     val sharedRoutineName = _sharedRoutineName.asStateFlow()
 
     private val _routineStarted = MutableStateFlow(false)
     val routineStarted = _routineStarted.asStateFlow()
+
+    private val _routineChanges = MutableStateFlow(false)
+    val routineChanges = _routineChanges.asStateFlow()
 
     private val _workoutScreenType = MutableStateFlow("")
     val workoutScreenType = _workoutScreenType.asStateFlow()
@@ -170,5 +177,16 @@ class ExerciseRoutineSharedViewModel(): ViewModel() {
 
     fun changeWorkoutScreenType(type: String){
         _workoutScreenType.value = type
+    }
+
+    fun addTitle(title: String){
+        _navigationTitles.add(title)
+    }
+
+    fun deleteLastTitle(){
+        val lastIndex = _navigationTitles.lastIndex
+        if (lastIndex >= 0) {
+            _navigationTitles.removeAt(lastIndex)
+        }
     }
 }

@@ -21,6 +21,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,12 +49,15 @@ fun PastWorkoutScreen(
     sharedViewModel: ExerciseRoutineSharedViewModel
 ){
     val pastRoutineExercises by viewModel.pastRoutine.collectAsState()
+
+    var fixedTitle by remember { mutableStateOf(sharedViewModel.lastTitle) }
+
     Scaffold(
-        topBar = { ProgoTopBar(navController)}
+        topBar = { ProgoTopBar(navController, sharedViewModel)}
     ) {
         PastWorkoutScreenContent(
             paddingValues = it,
-            routineName = routineName,
+            routineName = fixedTitle,
             pastRoutineExercises = pastRoutineExercises,
             sharedViewModel = sharedViewModel,
             navController = navController
@@ -172,7 +178,7 @@ fun PastExerciseNameText(
     Text(
         text = exerciseName,
         modifier = Modifier.clickable {
-            sharedViewModel.updateText(exerciseName)
+            sharedViewModel.addTitle(exerciseName)
             navController.navigate(OnWorkOutScreens.onWorkOutExerciseRecords.route)
         },
         color = Color.Green,

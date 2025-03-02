@@ -26,7 +26,7 @@ import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 
 @Composable
 fun BottomBarActualRoutine(
-    exerciseName: String,
+    routineName: String,
     navController: NavController,
     sharedViewModel: ExerciseRoutineSharedViewModel
 ){
@@ -39,21 +39,25 @@ fun BottomBarActualRoutine(
     ) {
         Row {
             Spacer(modifier = Modifier.size(20.dp))
-            ExerciseNameBottomBar(exerciseName)
+            RoutineNameBottomBar(routineName)
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             DiscardRoutine(sharedViewModel = sharedViewModel)
             Spacer(modifier = Modifier.size(15.dp, 90.dp))
-            ContinueRoutine(navController = navController)
+            ContinueRoutine(
+                navController = navController,
+                routineName = routineName,
+                sharedViewModel = sharedViewModel
+            )
             Spacer(modifier = Modifier.size(20.dp))
         }
     }
 }
 
 @Composable
-fun ExerciseNameBottomBar(exerciseName: String){
+fun RoutineNameBottomBar(routineName: String){
     Text(
-        text = exerciseName,
+        text = routineName,
         fontSize = 25.sp,
         color = Color.Green
     )
@@ -64,6 +68,7 @@ fun DiscardRoutine(sharedViewModel: ExerciseRoutineSharedViewModel){
     IconButton(
         onClick = {
             sharedViewModel.changeRoutineState(false)
+            sharedViewModel.deleteLastTitle()
         }
     ) {
         Icon(Icons.Default.Clear, contentDescription = "discard", tint = MaterialTheme.colorScheme.onSecondary)
@@ -71,9 +76,14 @@ fun DiscardRoutine(sharedViewModel: ExerciseRoutineSharedViewModel){
 }
 
 @Composable
-fun ContinueRoutine(navController: NavController){
+fun ContinueRoutine(
+    navController: NavController,
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    routineName: String
+){
     IconButton(
         onClick = {
+            sharedViewModel.addTitle(routineName)
             navController.navigate(OnWorkOutScreens.onWorkOutScreen.route)
         }
     ) {

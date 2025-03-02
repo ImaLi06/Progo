@@ -19,6 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -29,21 +32,26 @@ import com.example.progo.ui.component.ProgoTopBar
 import com.example.progo.ui.screens.informationScreens.PastReps
 import com.example.progo.ui.screens.informationScreens.PastWeight
 import com.example.progo.ui.screens.informationScreens.SetNumber
+import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 
 @Composable
 fun ExerciseStatsScreen(
     navController: NavController,
     exerciseName: String,
-    viewModel: ExerciseRoutineViewModel
+    viewModel: ExerciseRoutineViewModel,
+    sharedViewModel: ExerciseRoutineSharedViewModel
 ){
-    viewModel.getExerciseRecords(exerciseName)
+    viewModel.getExerciseRecords(sharedViewModel.lastTitle)
     val recordsList by viewModel.exerciseRecords.collectAsState()
+
+    var fixedTitle by remember { mutableStateOf(sharedViewModel.lastTitle) }
+
     Scaffold(
-        topBar = { ProgoTopBar(navController = navController)}
+        topBar = { ProgoTopBar(navController = navController, sharedViewModel = sharedViewModel)}
     ) {
         ExerciseStatsContent(
-            exerciseName = exerciseName,
+            exerciseName = fixedTitle,
             paddingValues = it,
             viewModel = viewModel,
             recordsList = recordsList

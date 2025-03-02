@@ -34,7 +34,7 @@ fun ExerciseListScreen(
     navRoute: String
 ){
     Scaffold(
-        topBar = { ProgoTopBar(navController) }
+        topBar = { ProgoTopBar(navController, sharedViewModel) }
     ) {
         ExerciseListContent(
             paddingValues = it,
@@ -73,7 +73,10 @@ fun ExerciseListContent(
         item {
             PrincipalButton(
                 text = "Agregar",
-                onClick = {navController.navigate(navRoute)},
+                onClick = {
+                    sharedViewModel.addTitle("create_exercise")
+                    navController.navigate(navRoute)
+                },
                 height = 50,
                 width = 350
             )
@@ -89,6 +92,7 @@ fun Exercises(
 ){
     Button(
         onClick = {
+            sharedViewModel.deleteLastTitle()
             sharedViewModel.addExercise(item)
             navController.popBackStack()
         },

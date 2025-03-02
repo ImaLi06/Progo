@@ -18,6 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -53,7 +56,7 @@ fun OnWorkOutScreen(
     }
 
     Scaffold(
-        topBar = { ProgoTopBar(navController)}
+        topBar = { ProgoTopBar(navController, sharedViewModel)}
     ) {
         OnWorkOutScreenContent(
             paddingValues = it,
@@ -89,6 +92,8 @@ fun OnWorkOutScreenContent(
     val repsList = auxRepsWeightList.first
     val weightsList = auxRepsWeightList.second
 
+    var fixedTitle by remember { mutableStateOf(sharedViewModel.lastTitle) }
+
     LazyColumn(
         modifier = Modifier
             .padding(paddingValues)
@@ -96,7 +101,7 @@ fun OnWorkOutScreenContent(
         contentPadding = PaddingValues(all = 20.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        item { Text(text = routineName, fontSize = 30.sp) }
+        item { Text(text = fixedTitle, fontSize = 30.sp) }
         itemsIndexed(exerciseList){index, item ->
             val repsSubList = repsList.getOrNull(index) ?: emptyList()
             val weightSubList = weightsList.getOrNull(index) ?: emptyList()
@@ -116,7 +121,10 @@ fun OnWorkOutScreenContent(
         item{
             PrincipalButton(
                 text = "Agregar Ejercicio",
-                onClick = {navController.navigate(OnWorkOutScreens.onWorkOutExerciseList.route)},
+                onClick = {
+                    navController.navigate(OnWorkOutScreens.onWorkOutExerciseList.route)
+                    sharedViewModel.addTitle("add_exercise")
+                },
                 height = 60,
                 width = 400
             )
@@ -125,6 +133,7 @@ fun OnWorkOutScreenContent(
             PrincipalButton(
                 text = "Terminar Rutina",
                 onClick = {
+                    sharedViewModel.deleteLastTitle()
                     saveRoutine(
                         navController = navController,
                         sharedViewModel = sharedViewModel,

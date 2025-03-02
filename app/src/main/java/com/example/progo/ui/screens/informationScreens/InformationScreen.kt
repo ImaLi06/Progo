@@ -95,7 +95,7 @@ fun RoutineRecordPreVisualization(
 ){
     Button(
         onClick = {
-            sharedViewModel.updateText(item.routineName)
+            sharedViewModel.addTitle(item.routineName)
             viewModel.getRoutineRecordWithExercise(item.routineRecordId)
             navController.navigate(OnWorkOutScreens.pastWorkOutScreen.route)
         },

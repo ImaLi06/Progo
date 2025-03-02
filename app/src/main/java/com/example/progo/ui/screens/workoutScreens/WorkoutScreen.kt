@@ -22,6 +22,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.progo.data.entities.ExerciseRoutine.RoutineWithExercise
 import com.example.progo.data.entities.Routine
+import com.example.progo.ui.component.BottomBarActualRoutine
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.navigationScreens.Graph
 import com.example.progo.ui.navigationScreens.OnWorkOutScreens
@@ -50,22 +52,57 @@ fun WorkoutScreen(
     paddingValues: PaddingValues,
     viewModel: ExerciseRoutineViewModel,
     sharedViewModel: ExerciseRoutineSharedViewModel,
-    routineState: Boolean
+    routineState: Boolean,
+    routineName: String
 ){
 
     val auxRoutineList by viewModel.allRoutines.collectAsState(initial = emptyList())
 
+    Scaffold(
+        bottomBar = {
+            if(routineState){
+                BottomBarActualRoutine(
+                    navController = navController,
+                    sharedViewModel = sharedViewModel,
+                    routineName = routineName
+                )
+            }
+        },
+        modifier = Modifier.padding(paddingValues)
+    ) {
+        WorkoutScreenContent(
+            paddingValues = it,
+            navController = navController,
+            auxRoutineList = auxRoutineList,
+            routineState = routineState,
+            viewModel = viewModel,
+            sharedViewModel = sharedViewModel
+        )
+    }
+}
+
+@Composable
+fun WorkoutScreenContent(
+    paddingValues: PaddingValues,
+    navController: NavController,
+    auxRoutineList: List<Routine>,
+    routineState: Boolean,
+    viewModel: ExerciseRoutineViewModel,
+    sharedViewModel: ExerciseRoutineSharedViewModel
+){
     LazyColumn(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
-            .fillMaxSize()
-            .padding(paddingValues),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(5.dp),
         contentPadding = PaddingValues(10.dp)
     ) {
         item {
-            CreateNewRoutineButton(navController = navController)
+            CreateNewRoutineButton(
+                navController = navController,
+                sharedViewModel = sharedViewModel
+            )
         }
         items(auxRoutineList){ item ->
             RoutinePreVisualization(
@@ -125,6 +162,7 @@ fun RoutinePreVisualization(
                             viewModel.getRoutineWithExercise(item.routineName)
                             viewModel.getSetsExerciseRoutine(item.routineName)
                             sharedViewModel.updateText(item.routineName)
+                            sharedViewModel.addTitle(item.routineName)
                             sharedViewModel.changeWorkoutScreenType("workout")
                             navController.navigate(OnWorkOutScreens.onWorkOutScreen.route)
                         }
@@ -140,10 +178,11 @@ fun RoutinePreVisualization(
 }
 
 @Composable
-fun CreateNewRoutineButton(navController: NavController){
+fun CreateNewRoutineButton(navController: NavController, sharedViewModel: ExerciseRoutineSharedViewModel){
     PrincipalButton(
         text = "Crear nueva rutina",
         onClick = {
+            sharedViewModel.addTitle("Edit")
             navController.navigate(Graph.WORKOUT)
         },
         height = 80,
@@ -174,6 +213,7 @@ fun WorkOutAdditionalOptions(
                         viewModel.getRoutineWithExercise(item.routineName)
                         viewModel.getSetsExerciseRoutine(item.routineName)
                         sharedViewModel.updateText(item.routineName)
+                        sharedViewModel.addTitle(item.routineName)
                         sharedViewModel.changeWorkoutScreenType("edit")
                         navController.navigate(OnWorkOutScreens.onWorkOutScreen.route)
                     }
