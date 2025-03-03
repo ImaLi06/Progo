@@ -53,7 +53,7 @@ fun PastWorkoutScreen(
     var fixedTitle by remember { mutableStateOf(sharedViewModel.lastTitle) }
 
     Scaffold(
-        topBar = { ProgoTopBar(navController, sharedViewModel)}
+        topBar = { ProgoTopBar(navController, sharedViewModel, "past")}
     ) {
         PastWorkoutScreenContent(
             paddingValues = it,

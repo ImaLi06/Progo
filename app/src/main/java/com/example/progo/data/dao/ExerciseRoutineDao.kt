@@ -37,6 +37,9 @@ interface ExerciseRoutineDao {
         deleteRoutine(routine)
     }
 
+    @Query("DELETE FROM ExerciseRoutineCrossRef WHERE routineName = :routineName AND exerciseName = :exerciseName")
+    suspend fun deleteExerciseFromRoutine(routineName: String, exerciseName: String)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExerciseRoutineCrossRef(crossRef: ExerciseRoutineCrossRef)
 

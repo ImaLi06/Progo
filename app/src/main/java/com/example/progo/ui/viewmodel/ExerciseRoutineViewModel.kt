@@ -130,4 +130,10 @@ class ExerciseRoutineViewModel(application: Application):AndroidViewModel(applic
             repository.deleteRoutineWithCrossRef(routine)
         }
     }
+
+    fun deleteExerciseFromRoutine(routineName: String, exerciseName: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteExerciseFromRoutine(routineName, exerciseName)
+        }
+    }
 }

@@ -83,6 +83,7 @@ fun ContinueRoutine(
 ){
     IconButton(
         onClick = {
+            sharedViewModel.changeWorkoutScreenType("workout")
             sharedViewModel.addTitle(routineName)
             navController.navigate(OnWorkOutScreens.onWorkOutScreen.route)
         }

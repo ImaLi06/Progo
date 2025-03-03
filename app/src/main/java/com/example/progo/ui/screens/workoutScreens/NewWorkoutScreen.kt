@@ -67,7 +67,7 @@ fun NewWorkoutScreen(
     screenType: String
 ){
     Scaffold(
-        topBar = { ProgoTopBar(navController, sharedViewModel)}
+        topBar = { ProgoTopBar(navController, sharedViewModel, "new")}
     ) {
         NewWorkoutContent(
             paddingValues = it,
@@ -130,7 +130,9 @@ fun NewWorkoutContent(
                 repsList = repsSubList,
                 weightList = weightSubList,
                 navController = navController,
-                screenType = screenType
+                screenType = screenType,
+                viewModel = viewModel,
+                routineName = routineName
             )
         }
         item {
@@ -171,13 +173,15 @@ fun Input(
     item: Exercise,
     index: Int,
     sharedViewModel: ExerciseRoutineSharedViewModel,
+    viewModel: ExerciseRoutineViewModel,
     repsValues: List<List<String>>,
     weightValues: List<List<String>>,
     exerciseListSize: Int,
     repsList: List<Int>,
     weightList: List<Float>,
     navController: NavController,
-    screenType: String
+    screenType: String,
+    routineName: String
 ){
     Row(
         modifier = Modifier
@@ -216,11 +220,14 @@ fun Input(
                     fontSize = 20,
                     sharedViewModel = sharedViewModel,
                     screenType = screenType,
-                    viewModel = viewModel()
                 )
                 InputAdditionalOptions(
                     index = index,
-                    sharedViewModel = sharedViewModel
+                    sharedViewModel = sharedViewModel,
+                    viewModel = viewModel,
+                    routineName = routineName,
+                    exerciseName = item.exerciseName,
+                    screenType = screenType
                 )
             }
             Row(
@@ -329,6 +336,10 @@ fun Reps(
 fun InputAdditionalOptions(
     index: Int,
     sharedViewModel: ExerciseRoutineSharedViewModel,
+    viewModel: ExerciseRoutineViewModel,
+    routineName: String,
+    exerciseName: String,
+    screenType: String
 ){
     var expanded by remember { mutableStateOf(false)}
     Box{
@@ -346,7 +357,15 @@ fun InputAdditionalOptions(
             if(setNum != null && setNum > 1){
                 DropdownMenuItem(onClick = {sharedViewModel.deleteSet(index)}, text = { Text("Eliminar set")})
             }
-            DropdownMenuItem(onClick = {sharedViewModel.removeExercise(index)}, text = { Text("Eliminar ejercicio")})
+            DropdownMenuItem(
+                onClick = {
+                    sharedViewModel.removeExercise(index)
+                    if(screenType == "edit"){
+                        viewModel.deleteExerciseFromRoutine(routineName = routineName, exerciseName = exerciseName)
+                    }
+                },
+                text = { Text("Eliminar ejercicio")}
+            )
         }
     }
 }
@@ -386,7 +405,6 @@ fun ExerciseNameText(
     exerciseName: String,
     fontSize: Int,
     sharedViewModel: ExerciseRoutineSharedViewModel,
-    viewModel: ExerciseRoutineViewModel,
     screenType: String
 ){
     Text(

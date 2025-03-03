@@ -56,7 +56,7 @@ fun OnWorkOutScreen(
     }
 
     Scaffold(
-        topBar = { ProgoTopBar(navController, sharedViewModel)}
+        topBar = { ProgoTopBar(navController, sharedViewModel, workOutScreenType)}
     ) {
         OnWorkOutScreenContent(
             paddingValues = it,
@@ -115,7 +115,9 @@ fun OnWorkOutScreenContent(
                 weightList = weightSubList,
                 exerciseListSize = exerciseList.size,
                 navController = navController,
-                screenType = workOutScreenType
+                screenType = workOutScreenType,
+                routineName = routineName,
+                viewModel = viewModel
             )
         }
         item{
@@ -166,6 +168,7 @@ fun saveRoutine(
 ){
     if(workOutScreenType == "edit"){
         sharedViewModel.changeRoutineState(false)
+        println(exerciseList)
         viewModel.insertRoutineWithExercises(
             routine = Routine(routineName),
             exercises = exerciseList,

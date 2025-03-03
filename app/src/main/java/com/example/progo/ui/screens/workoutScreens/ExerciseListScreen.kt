@@ -34,7 +34,7 @@ fun ExerciseListScreen(
     navRoute: String
 ){
     Scaffold(
-        topBar = { ProgoTopBar(navController, sharedViewModel) }
+        topBar = { ProgoTopBar(navController, sharedViewModel, "list") }
     ) {
         ExerciseListContent(
             paddingValues = it,

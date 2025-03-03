@@ -30,7 +30,7 @@ fun NewExerciseScreen(
     sharedViewModel: ExerciseRoutineSharedViewModel
 ){
     Scaffold(
-        topBar = {ProgoTopBar(navController = navController, sharedViewModel = sharedViewModel)}
+        topBar = {ProgoTopBar(navController = navController, sharedViewModel = sharedViewModel, "newExercise")}
     ) {
         NewExerciseContent(
             paddingValues = it,

@@ -27,7 +27,8 @@ import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 @Composable
 fun ProgoTopBar(
     navController: NavController,
-    sharedViewModel: ExerciseRoutineSharedViewModel
+    sharedViewModel: ExerciseRoutineSharedViewModel,
+    route: String,
 ){
     TopAppBar(
         title = {
@@ -38,6 +39,9 @@ fun ProgoTopBar(
             ) {
                 IconButton(
                     onClick = {
+                        if(route == "edit"){
+                            sharedViewModel.changeRoutineState(false)
+                        }
                         sharedViewModel.deleteLastTitle()
                         navController.popBackStack()
                     }

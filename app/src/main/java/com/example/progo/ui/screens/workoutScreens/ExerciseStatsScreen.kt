@@ -48,7 +48,7 @@ fun ExerciseStatsScreen(
     var fixedTitle by remember { mutableStateOf(sharedViewModel.lastTitle) }
 
     Scaffold(
-        topBar = { ProgoTopBar(navController = navController, sharedViewModel = sharedViewModel)}
+        topBar = { ProgoTopBar(navController = navController, sharedViewModel = sharedViewModel, "stats")}
     ) {
         ExerciseStatsContent(
             exerciseName = fixedTitle,
