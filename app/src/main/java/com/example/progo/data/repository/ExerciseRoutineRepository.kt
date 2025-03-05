@@ -15,9 +15,6 @@ class ExerciseRoutineRepository(private val exerciseRoutineDao: ExerciseRoutineD
     suspend fun addExercise(exercise: Exercise){
         exerciseRoutineDao.upsertExercise(exercise)
     }
-    suspend fun addRoutine(routine: Routine){
-        exerciseRoutineDao.upsertRoutine(routine)
-    }
 
     suspend fun deleteRoutineWithCrossRef(routine: Routine){
         exerciseRoutineDao.deleteRoutineWithCrossRef(routine)
@@ -29,9 +26,6 @@ class ExerciseRoutineRepository(private val exerciseRoutineDao: ExerciseRoutineD
 
     suspend fun getRoutineWithExercise(routineName: String): List<RoutineWithExercise>{
         return exerciseRoutineDao.getRoutineWithExercise(routineName)
-    }
-    fun getExerciseWithRoutine(exerciseName: String): List<ExerciseWithRoutine>{
-        return exerciseRoutineDao.getExerciseWithRoutine(exerciseName)
     }
 
     suspend fun getSetsExerciseRoutine(routineName: String): List<Int>{

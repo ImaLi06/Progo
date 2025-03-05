@@ -38,7 +38,6 @@ import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 @Composable
 fun ExerciseStatsScreen(
     navController: NavController,
-    exerciseName: String,
     viewModel: ExerciseRoutineViewModel,
     sharedViewModel: ExerciseRoutineSharedViewModel
 ){

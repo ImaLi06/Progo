@@ -2,7 +2,6 @@ package com.example.progo.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -85,7 +84,7 @@ fun ContinueRoutine(
         onClick = {
             sharedViewModel.changeWorkoutScreenType("workout")
             sharedViewModel.addTitle(routineName)
-            navController.navigate(OnWorkOutScreens.onWorkOutScreen.route)
+            navController.navigate(OnWorkOutScreens.OnWorkOutScreen.route)
         }
     ) {
         Icon(Icons.Default.Check, contentDescription = "continue", tint = MaterialTheme.colorScheme.onSecondary)

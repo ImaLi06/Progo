@@ -10,14 +10,6 @@ import kotlinx.coroutines.flow.Flow
 class ExerciseRoutineRecordRepository(private val exerciseRoutineRecordDao: ExerciseRoutineRecordDao) {
     val readAllDataRoutineRecord: Flow<List<RoutineRecord>> = exerciseRoutineRecordDao.readAllDataRoutineRecord()
 
-    suspend fun addRoutineRecord(routineRecord: RoutineRecord){
-        exerciseRoutineRecordDao.upsertRoutineRecord(routineRecord)
-    }
-
-    suspend fun deleteRoutineRecord(routineRecord: RoutineRecord){
-        exerciseRoutineRecordDao.deleteRoutineRecord(routineRecord)
-    }
-
     suspend fun addRoutineRecordWithExercises(
         routineName: String,
         exerciseList: List<Exercise>,

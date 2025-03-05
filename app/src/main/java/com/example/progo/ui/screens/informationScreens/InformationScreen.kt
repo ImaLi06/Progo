@@ -1,10 +1,7 @@
 package com.example.progo.ui.screens.informationScreens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.progo.data.entities.RoutineRecord
 import com.example.progo.ui.component.BottomBarActualRoutine
@@ -97,7 +93,7 @@ fun RoutineRecordPreVisualization(
         onClick = {
             sharedViewModel.addTitle(item.routineName)
             viewModel.getRoutineRecordWithExercise(item.routineRecordId)
-            navController.navigate(OnWorkOutScreens.pastWorkOutScreen.route)
+            navController.navigate(OnWorkOutScreens.PastWorkOutScreen.route)
         },
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.secondary

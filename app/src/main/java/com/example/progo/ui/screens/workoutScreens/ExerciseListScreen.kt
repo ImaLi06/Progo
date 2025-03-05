@@ -22,7 +22,6 @@ import androidx.navigation.NavController
 import com.example.progo.data.entities.Exercise
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.ProgoTopBar
-import com.example.progo.ui.navigationScreens.WorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 

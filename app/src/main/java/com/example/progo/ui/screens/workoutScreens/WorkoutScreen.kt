@@ -36,13 +36,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.progo.data.entities.ExerciseRoutine.RoutineWithExercise
 import com.example.progo.data.entities.Routine
 import com.example.progo.ui.component.BottomBarActualRoutine
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.navigationScreens.Graph
 import com.example.progo.ui.navigationScreens.OnWorkOutScreens
-import com.example.progo.ui.navigationScreens.WorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
 
@@ -164,7 +162,7 @@ fun RoutinePreVisualization(
                             sharedViewModel.updateText(item.routineName)
                             sharedViewModel.addTitle(item.routineName)
                             sharedViewModel.changeWorkoutScreenType("workout")
-                            navController.navigate(OnWorkOutScreens.onWorkOutScreen.route)
+                            navController.navigate(OnWorkOutScreens.OnWorkOutScreen.route)
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Green),
@@ -215,7 +213,7 @@ fun WorkOutAdditionalOptions(
                         sharedViewModel.updateText(item.routineName)
                         sharedViewModel.addTitle(item.routineName)
                         sharedViewModel.changeWorkoutScreenType("edit")
-                        navController.navigate(OnWorkOutScreens.onWorkOutScreen.route)
+                        navController.navigate(OnWorkOutScreens.OnWorkOutScreen.route)
                     }
                 },
                 text = { Text("Editar")}

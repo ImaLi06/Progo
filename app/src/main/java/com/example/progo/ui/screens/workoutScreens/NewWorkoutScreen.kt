@@ -40,14 +40,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.progo.data.entities.Exercise
 import com.example.progo.data.entities.Routine
 import com.example.progo.ui.component.PrincipalTextLabel
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.SecondaryTextLabel
-import com.example.progo.ui.component.SecondaryTextTemplate
 import com.example.progo.ui.component.ProgoTopBar
 import com.example.progo.ui.navigationScreens.OnWorkOutScreens
 import com.example.progo.ui.navigationScreens.WorkoutScreen
@@ -139,7 +137,7 @@ fun NewWorkoutContent(
             AddExerciseButton(
                 text = "Agregar Ejercicio",
                 onClick = {
-                    navController.navigate(WorkoutScreen.exerciseList.route)
+                    navController.navigate(WorkoutScreen.ExerciseList.route)
                     sharedViewModel.addTitle("create_exercise")
                 },
                 height = 60,
@@ -412,10 +410,10 @@ fun ExerciseNameText(
         modifier = Modifier.clickable {
             sharedViewModel.addTitle(exerciseName)
             if(screenType == "create"){
-                navController.navigate(WorkoutScreen.exerciseStats.route)
+                navController.navigate(WorkoutScreen.ExerciseStats.route)
             }
             else{
-                navController.navigate(OnWorkOutScreens.onWorkOutExerciseRecords.route)
+                navController.navigate(OnWorkOutScreens.OnWorkOutExerciseRecords.route)
             }
         },
         color = Color.Green,

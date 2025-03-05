@@ -9,9 +9,9 @@ import com.example.progo.ui.screens.loginScreens.insertUserData
 fun NavGraphBuilder.authNavGraph(navController: NavHostController){
     navigation(
         route = Graph.LOGIN,
-        startDestination = loginScreen.Login.route
+        startDestination = LoginScreen.Login.route
     ){
-        composable(route = loginScreen.Login.route) {
+        composable(route = LoginScreen.Login.route) {
             insertUserData(
                 start = {
                     navController.popBackStack()
@@ -22,6 +22,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController){
     }
 }
 
-sealed class loginScreen(val route: String){
-    object Login: loginScreen("login_screen")
+sealed class LoginScreen(val route: String){
+    object Login: LoginScreen("login_screen")
 }

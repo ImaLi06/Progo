@@ -59,7 +59,7 @@ fun HomeNavGraph(
                 routineState = routineState
             )
         }
-        composable(route = OnWorkOutScreens.onWorkOutScreen.route){ entry ->
+        composable(route = OnWorkOutScreens.OnWorkOutScreen.route){ entry ->
             val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
             val routineName by sharedViewModel.sharedRoutineName.collectAsStateWithLifecycle()
             val exerciseList by sharedViewModel.sharedExerciseList.collectAsStateWithLifecycle()
@@ -82,17 +82,17 @@ fun HomeNavGraph(
             )
         }
 
-        composable(route = OnWorkOutScreens.onWorkOutExerciseList.route){ entry ->
+        composable(route = OnWorkOutScreens.OnWorkOutExerciseList.route){ entry ->
             val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
             ExerciseListScreen(
                 navController = navController,
                 viewModel = viewModel,
                 sharedViewModel = sharedViewModel,
-                navRoute = OnWorkOutScreens.onWorkOutCreateExercise.route
+                navRoute = OnWorkOutScreens.OnWorkOutCreateExercise.route
             )
         }
 
-        composable(route = OnWorkOutScreens.onWorkOutCreateExercise.route){ entry ->
+        composable(route = OnWorkOutScreens.OnWorkOutCreateExercise.route){ entry ->
             val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
             NewExerciseScreen(
                 navController = navController,
@@ -101,23 +101,19 @@ fun HomeNavGraph(
             )
         }
 
-        composable(route = OnWorkOutScreens.pastWorkOutScreen.route){entry ->
+        composable(route = OnWorkOutScreens.PastWorkOutScreen.route){ entry ->
             val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
-            val routineName by sharedViewModel.sharedRoutineName.collectAsStateWithLifecycle()
             PastWorkoutScreen(
                 navController = navController,
                 viewModel = viewModel,
-                routineName = routineName,
                 sharedViewModel = sharedViewModel
             )
         }
 
-        composable(route = OnWorkOutScreens.onWorkOutExerciseRecords.route){entry ->
+        composable(route = OnWorkOutScreens.OnWorkOutExerciseRecords.route){ entry ->
             val sharedViewModel = entry.sharedViewModel<ExerciseRoutineSharedViewModel>(navController = navController)
-            val exerciseName by sharedViewModel.sharedRoutineName.collectAsStateWithLifecycle()
             ExerciseStatsScreen(
                 navController = navController,
-                exerciseName = exerciseName,
                 viewModel = viewModel,
                 sharedViewModel = sharedViewModel
             )
@@ -128,9 +124,9 @@ fun HomeNavGraph(
 }
 
 sealed class OnWorkOutScreens(val route: String){
-    object onWorkOutScreen: OnWorkOutScreens(route = "on_workout")
-    object onWorkOutExerciseList: OnWorkOutScreens(route = "on_workout_exercise_list")
-    object onWorkOutCreateExercise: OnWorkOutScreens(route = "on_workout_create_exercise")
-    object pastWorkOutScreen: OnWorkOutScreens(route = "past_workout_screen")
-    object onWorkOutExerciseRecords: OnWorkOutScreens(route = "on_workout_exercise_records")
+    object OnWorkOutScreen: OnWorkOutScreens(route = "on_workout")
+    object OnWorkOutExerciseList: OnWorkOutScreens(route = "on_workout_exercise_list")
+    object OnWorkOutCreateExercise: OnWorkOutScreens(route = "on_workout_create_exercise")
+    object PastWorkOutScreen: OnWorkOutScreens(route = "past_workout_screen")
+    object OnWorkOutExerciseRecords: OnWorkOutScreens(route = "on_workout_exercise_records")
 }

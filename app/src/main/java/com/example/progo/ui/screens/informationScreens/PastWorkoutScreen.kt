@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,7 +22,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,23 +32,19 @@ import androidx.navigation.NavController
 import com.example.progo.data.JsonConverters
 import com.example.progo.data.entities.ExerciseRecord
 import com.example.progo.ui.component.ProgoTopBar
-import com.example.progo.ui.component.SecondaryTextTemplate
 import com.example.progo.ui.navigationScreens.OnWorkOutScreens
-import com.example.progo.ui.navigationScreens.WorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
-import com.google.common.base.Converter
 
 @Composable
 fun PastWorkoutScreen(
     navController: NavController,
     viewModel: ExerciseRoutineViewModel,
-    routineName: String,
     sharedViewModel: ExerciseRoutineSharedViewModel
 ){
     val pastRoutineExercises by viewModel.pastRoutine.collectAsState()
 
-    var fixedTitle by remember { mutableStateOf(sharedViewModel.lastTitle) }
+    val fixedTitle by remember { mutableStateOf(sharedViewModel.lastTitle) }
 
     Scaffold(
         topBar = { ProgoTopBar(navController, sharedViewModel, "past")}
@@ -115,7 +109,7 @@ fun Record(item: ExerciseRecord, navController: NavController, sharedViewModel: 
             )
         }
         Spacer(Modifier.size(20.dp))
-        Row() {
+        Row {
             Spacer(Modifier.size(30.dp))
             SetNumber(item)
             Spacer(Modifier.size(30.dp))
@@ -179,7 +173,7 @@ fun PastExerciseNameText(
         text = exerciseName,
         modifier = Modifier.clickable {
             sharedViewModel.addTitle(exerciseName)
-            navController.navigate(OnWorkOutScreens.onWorkOutExerciseRecords.route)
+            navController.navigate(OnWorkOutScreens.OnWorkOutExerciseRecords.route)
         },
         color = Color.Green,
         fontSize = fontSize.sp
