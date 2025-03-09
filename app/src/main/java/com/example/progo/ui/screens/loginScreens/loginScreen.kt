@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.example.progo.R
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.UserDataTextFieldTemplate
-import com.example.progo.ui.component.SecondaryTextTemplate
+import com.example.progo.ui.component.SecondaryText
 
 @Composable
 fun insertUserData(start: () -> Unit){
@@ -67,7 +67,7 @@ fun insertUserData(start: () -> Unit){
 //Input fields
 @Composable
 fun insertUserTrainingTime(userData: String, onValueChange: (String) -> Unit) {
-    SecondaryTextTemplate(
+    SecondaryText(
         stringResource(R.string.training_user_years),
         20
     )
@@ -79,7 +79,7 @@ fun insertUserTrainingTime(userData: String, onValueChange: (String) -> Unit) {
 
 @Composable
 fun insertUserBirthday(userData: String, onValueChange: (String) -> Unit) {
-    SecondaryTextTemplate(
+    SecondaryText(
         stringResource(R.string.user_birthday),
         20
     )
@@ -91,7 +91,7 @@ fun insertUserBirthday(userData: String, onValueChange: (String) -> Unit) {
 
 @Composable
 fun insertUserName(userData: String, onValueChange: (String) -> Unit) {
-    SecondaryTextTemplate(
+    SecondaryText(
         stringResource(R.string.user_name),
         20
     )

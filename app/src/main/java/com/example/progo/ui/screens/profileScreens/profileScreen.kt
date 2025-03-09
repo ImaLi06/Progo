@@ -14,8 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.progo.ui.component.PrimaryTextTemplate
-import com.example.progo.ui.component.SecondaryTextTemplate
+import com.example.progo.ui.component.PrimaryText
+import com.example.progo.ui.component.SecondaryText
 
 @Composable
 fun UserProfileHeader(){
@@ -34,16 +34,16 @@ fun UserProfileHeader(){
             )
         }
         Column(modifier = Modifier.padding(10.dp, 0.dp)) {
-            PrimaryTextTemplate(
-                modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 10.dp),
-                "Nombre"
+            PrimaryText(
+                text = "Nombre",
+                fontSize = 25
             )
             Row {
-                SecondaryTextTemplate(
+                SecondaryText(
                     "Edad",
                     20
                 )
-                SecondaryTextTemplate(
+                SecondaryText(
                     "Años Entrenados",
                     20
                 )

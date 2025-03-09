@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.traceEventEnd
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +40,7 @@ import androidx.navigation.NavController
 import com.example.progo.data.entities.Routine
 import com.example.progo.ui.component.BottomBarActualRoutine
 import com.example.progo.ui.component.PrincipalButton
+import com.example.progo.ui.component.SecondaryText
 import com.example.progo.ui.navigationScreens.Graph
 import com.example.progo.ui.navigationScreens.OnWorkOutScreens
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
@@ -137,10 +139,9 @@ fun RoutinePreVisualization(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
-                Text(
+                SecondaryText(
                     text = item.routineName,
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    fontSize = 20.sp
+                    fontSize = 20
                 )
                 WorkOutAdditionalOptions(
                     viewModel = viewModel,
@@ -154,7 +155,8 @@ fun RoutinePreVisualization(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Button(
+                PrincipalButton(
+                    text = "Empezar Rutina",
                     onClick = {
                         if(!routineState){
                             viewModel.getRoutineWithExercise(item.routineName)
@@ -165,11 +167,9 @@ fun RoutinePreVisualization(
                             navController.navigate(OnWorkOutScreens.OnWorkOutScreen.route)
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Green),
-                    shape = RoundedCornerShape(15.dp)
-                ) {
-                    Text("Empezar Rutina")
-                }
+                    height = 40,
+                    width = 180
+                )
             }
         }
     }

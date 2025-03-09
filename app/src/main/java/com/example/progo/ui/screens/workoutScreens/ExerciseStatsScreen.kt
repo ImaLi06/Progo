@@ -28,7 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.progo.data.entities.ExerciseRecord
+import com.example.progo.ui.component.PrimaryText
 import com.example.progo.ui.component.ProgoTopBar
+import com.example.progo.ui.component.SecondaryText
 import com.example.progo.ui.screens.informationScreens.PastReps
 import com.example.progo.ui.screens.informationScreens.PastWeight
 import com.example.progo.ui.screens.informationScreens.SetNumber
@@ -73,7 +75,10 @@ fun ExerciseStatsContent(
         item {
             Row {
                 Spacer(Modifier.size(10.dp))
-                Text(exerciseName, fontSize = 30.sp)
+                PrimaryText(
+                    text = exerciseName,
+                    fontSize = 30
+                )
             }
         }
         items(recordsList){ item ->
@@ -95,9 +100,15 @@ fun ExerciseRegister(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(Modifier.size(10.dp))
-            Text(item.date)
+            SecondaryText(
+                text = "RM: ${item.rm}",
+                fontSize = 16
+            )
             Spacer(modifier = Modifier.size(30.dp))
-            Text("RM: ${item.rm}")
+            PrimaryText(
+                text = item.date,
+                fontSize = 16
+            )
         }
         Spacer(Modifier.size(10.dp))
         Row() {

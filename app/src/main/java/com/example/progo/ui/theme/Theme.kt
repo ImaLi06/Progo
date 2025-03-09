@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 
 private val DarkColorScheme = darkColorScheme(
     background = ThemeColors.Night.backGround,
+    onBackground = ThemeColors.Night.mainText,
     primary = ThemeColors.Night.primary,
     secondary = ThemeColors.Night.secondary,
     onPrimary = ThemeColors.Night.textA,
@@ -16,6 +17,7 @@ private val DarkColorScheme = darkColorScheme(
 
 private val LightColorScheme = lightColorScheme(
     background = ThemeColors.Day.backGround,
+    onBackground = ThemeColors.Day.mainText,
     primary = ThemeColors.Day.primary,
     secondary = ThemeColors.Day.secondary,
     onPrimary = ThemeColors.Day.textA,

@@ -47,6 +47,7 @@ import com.example.progo.ui.component.PrincipalTextLabel
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.SecondaryTextLabel
 import com.example.progo.ui.component.ProgoTopBar
+import com.example.progo.ui.component.SecondaryText
 import com.example.progo.ui.navigationScreens.OnWorkOutScreens
 import com.example.progo.ui.navigationScreens.WorkoutScreen
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
@@ -260,14 +261,20 @@ fun LastRecord(sets: Int?, repsList: List<Int>, weightList: List<Float>){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text("Record")
+        SecondaryText(
+            text = "Record",
+            fontSize = 16
+        )
         Spacer(modifier = Modifier.size(10.dp))
         if(sets != null){
             repeat(sets){subIndex ->
                 val weight = weightList.getOrNull(subIndex) ?: 0.0
                 val reps = repsList.getOrNull(subIndex) ?: 0
                 Spacer(modifier = Modifier.size(10.dp, 10.dp))
-                Text("${weight}x${reps}")
+                SecondaryText(
+                    text = "${weight}x${reps}",
+                    fontSize = 16
+                )
                 Spacer(modifier = Modifier.size(10.dp, 36.dp))
             }
         }
@@ -284,7 +291,10 @@ fun Weight(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Text("Peso")
+        SecondaryText(
+            text = "Peso",
+            fontSize = 16
+        )
         Spacer(modifier = Modifier.size(10.dp))
         if(sets != null){
             repeat(sets){index ->
@@ -312,7 +322,10 @@ fun Reps(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Text("Repeticiones")
+        SecondaryText(
+            text = "Repeticiones",
+            fontSize = 16
+        )
         Spacer(modifier = Modifier.size(10.dp))
         if(sets != null){
             repeat(sets){index ->

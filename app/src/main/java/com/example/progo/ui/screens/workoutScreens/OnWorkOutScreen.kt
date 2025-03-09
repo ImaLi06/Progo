@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.progo.data.entities.Exercise
 import com.example.progo.data.entities.Routine
+import com.example.progo.ui.component.PrimaryText
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.ProgoTopBar
 import com.example.progo.ui.navigationScreens.OnWorkOutScreens
@@ -93,7 +94,12 @@ fun OnWorkOutScreenContent(
         contentPadding = PaddingValues(all = 20.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        item { Text(text = fixedTitle, fontSize = 30.sp) }
+        item {
+            PrimaryText(
+                text = fixedTitle,
+                fontSize = 30,
+            )
+        }
         itemsIndexed(exerciseList){index, item ->
             val repsSubList = repsList.getOrNull(index) ?: emptyList()
             val weightSubList = weightsList.getOrNull(index) ?: emptyList()

@@ -6,6 +6,7 @@ sealed class ThemeColors(
     val backGround: Color,
     val primary: Color,
     val secondary: Color,
+    val mainText: Color,
     val textA: Color,
     val textB: Color
 ) {
@@ -13,6 +14,7 @@ sealed class ThemeColors(
         backGround = Color(0xFF151515),
         primary = Color.Green,
         secondary = Color(0xFF232323),
+        mainText = Color.Green,
         textA = Color(0xFF2C2C2C),
         textB = Color(0xFFFFFFFF)
     )
@@ -21,6 +23,7 @@ sealed class ThemeColors(
         backGround = Color(0xFFFFFFFF),
         primary = Color.Green,
         secondary = Color(0xFFF3F3F3),
+        mainText =Color.Green,
         textA = Color(0xFFFFFFFF),
         textB = Color(0xFF9D9D9D)
     )

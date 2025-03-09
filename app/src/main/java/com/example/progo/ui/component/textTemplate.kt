@@ -3,25 +3,24 @@ package com.example.progo.ui.component
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun PrimaryTextTemplate(modifier: Modifier, primaryText: String){
+fun PrimaryText(text: String, fontSize: Int){
     Text(
-        text = primaryText,
-        color = MaterialTheme.colorScheme.secondary,
-        fontSize = 25.sp,
-        modifier = modifier
+        text = text,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.onBackground,
+        fontSize = fontSize.sp,
     )
 }
 
 @Composable
-fun SecondaryTextTemplate(secondaryText: String, fontSize: Int){
+fun SecondaryText(text: String, fontSize: Int){
     Text(
-        text = secondaryText,
-        color = Color.Green,
+        text = text,
+        color = MaterialTheme.colorScheme.onSecondary,
         fontSize = fontSize.sp
     )
 }

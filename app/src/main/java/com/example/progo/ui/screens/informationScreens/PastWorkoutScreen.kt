@@ -31,7 +31,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.progo.data.JsonConverters
 import com.example.progo.data.entities.ExerciseRecord
+import com.example.progo.ui.component.PrimaryText
 import com.example.progo.ui.component.ProgoTopBar
+import com.example.progo.ui.component.SecondaryText
 import com.example.progo.ui.navigationScreens.OnWorkOutScreens
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
@@ -75,9 +77,9 @@ fun PastWorkoutScreenContent(
         contentPadding = PaddingValues(10.dp),
     ) {
         item {
-            Text(
-                routineName,
-                fontSize = 30.sp
+            PrimaryText(
+                text = routineName,
+                fontSize = 30
             )
         }
         items(pastRoutineExercises){ item ->
@@ -108,7 +110,7 @@ fun Record(item: ExerciseRecord, navController: NavController, sharedViewModel: 
                 sharedViewModel = sharedViewModel
             )
         }
-        Spacer(Modifier.size(20.dp))
+        Spacer(Modifier.size(15.dp))
         Row {
             Spacer(Modifier.size(30.dp))
             SetNumber(item)
@@ -127,7 +129,10 @@ fun SetNumber(item: ExerciseRecord){
         Text(" ")
         Spacer(Modifier.size(10.dp))
         repeat(item.sets){i ->
-            Text("${i + 1}", fontSize = 20.sp)
+            SecondaryText(
+                text = "${i + 1}",
+                fontSize = 20
+            )
         }
     }
 }
@@ -138,11 +143,17 @@ fun PastReps(item: ExerciseRecord){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Reps", fontSize = 20.sp)
+        SecondaryText(
+            text = "Reps",
+            fontSize = 20
+        )
         Spacer(Modifier.size(10.dp))
         val repsList = converter.fromJsonToIntList(item.reps)
         repeat(item.sets){i ->
-            Text("${repsList[i]}", fontSize = 20.sp)
+            SecondaryText(
+                text = "${repsList[i]}",
+                fontSize = 20
+            )
         }
     }
 }
@@ -153,11 +164,17 @@ fun PastWeight(item: ExerciseRecord){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Weight", fontSize = 20.sp)
+        SecondaryText(
+            text = "Peso",
+            fontSize = 20
+        )
         Spacer(Modifier.size(10.dp))
         val weightList = converter.fromJsonToFloatList(item.weight)
         repeat(item.sets){i->
-            Text("${weightList[i]}", fontSize = 20.sp)
+            SecondaryText(
+                text = "${weightList[i]}",
+                fontSize = 20
+            )
         }
     }
 }

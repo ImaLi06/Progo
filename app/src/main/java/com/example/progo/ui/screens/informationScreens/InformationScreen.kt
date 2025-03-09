@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,7 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.progo.data.entities.RoutineRecord
 import com.example.progo.ui.component.BottomBarActualRoutine
-import com.example.progo.ui.component.SecondaryTextTemplate
+import com.example.progo.ui.component.PrimaryText
+import com.example.progo.ui.component.SecondaryText
 import com.example.progo.ui.navigationScreens.OnWorkOutScreens
 import com.example.progo.ui.viewmodel.ExerciseRoutineSharedViewModel
 import com.example.progo.ui.viewmodel.ExerciseRoutineViewModel
@@ -101,12 +103,11 @@ fun RoutineRecordPreVisualization(
         shape = RoundedCornerShape(15.dp),
         modifier = Modifier.width(360.dp),
     ) {
-        SecondaryTextTemplate(secondaryText = item.routineName, fontSize = 20)
-        Spacer(Modifier.width(20.dp))
-        Text(
+        SecondaryText(text = item.routineName, fontSize = 20)
+        Spacer(Modifier.size(30.dp))
+        PrimaryText(
             text = item.date,
-            color = MaterialTheme.colorScheme.onSecondary,
-            modifier = Modifier.padding(10.dp)
+            fontSize = 16
         )
     }
 }
