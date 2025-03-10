@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.progo.data.entities.Exercise
+import com.example.progo.ui.component.DropDownButton
+import com.example.progo.ui.component.OptionDialog
 import com.example.progo.ui.component.PrincipalButton
 import com.example.progo.ui.component.PrincipalTextLabel
 import com.example.progo.ui.component.ProgoTopBar
@@ -49,6 +51,9 @@ fun NewExerciseContent(
     sharedViewModel: ExerciseRoutineSharedViewModel
 ){
     var exerciseNameAux by remember { mutableStateOf("") }
+    val listMaterial = listOf("Mancuernas", "Polea", "Barra", "Maquina")
+    val listMuscles = listOf("Biceps", "Triceps", "Cuadriceps", "Deltoides", "Isquiotibiales",
+        "Dorsales", "Trapecios", "Pantorrilas", "Gluteos", "Aductor")
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,6 +68,10 @@ fun NewExerciseContent(
             width = 350
         )
         Spacer(modifier = Modifier.height(30.dp))
+        OptionDialog(list = listMuscles, widthField = 350, heightField = 60)
+        Spacer(modifier = Modifier.height(30.dp))
+        DropDownButton(list = listMaterial, width = 350, height = 60)
+        Spacer(modifier = Modifier.height(30.dp))
         PrincipalButton(
             text = "Listo",
             onClick = {
@@ -73,7 +82,7 @@ fun NewExerciseContent(
                     exerciseNameAux = ""
                     navController.popBackStack()
                 }
-                      },
+            },
             height = 50,
             width = 350
         )
